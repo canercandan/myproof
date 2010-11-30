@@ -16,7 +16,7 @@
 #include "tree-pass.h"
 #include "cfgloop.h"
 
-#include "mylist.h"
+#include "mylist.h" // to get a linked list
 
 typedef struct { char name[128]; int size, IR, IW, FR, FW; } t_mydata;
 static t_mylist *mylist;

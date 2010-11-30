@@ -1,0 +1,4 @@
++ project
+  |-plugin: (1) gcc = plugin.so
+  |-lib myprof: (2) gcc test.c -fplugin=plugin.so -lmyprof -> test (mesure() -> gettimeofday)
+  |-profiler: (3) ./test -> test.out -> profiler test.out

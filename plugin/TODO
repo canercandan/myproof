@@ -1,0 +1,16 @@
+tree createfunctioncall(const char* fname, const char* arg)
+{
+	tree res;
+	tree ftype = build_function_type_list(void_type_node, /*return*/, ptr_type_node, /* premier arg */, NULL_TREE);
+	// creation de la declaration
+	tree fdecl = build_fun_decl(fname, ftype);
+	tree fs = build_string(strlen(arg) + 1, arg);
+	TREE_TYPE(fs) = build_array_type(char_type_node, build_index-type(build_int_cst( NULL_TREE, strlen(arg))));
+
+	TREE_CONSTANT(fs) = 1;
+	TREE_READONLY(fs = 1;
+	TREE_STATIC(fs) = 1;
+	fs = build1(ADDR_EXPR, build_pointer_type(char_type_node), fs);
+	tree fargs = tree_cons(NULL_TREE, fs, NULL_TREE);
+	return build_function_call_expr(UNKNOWN_LOCATION, fndecl, fargs);
+}

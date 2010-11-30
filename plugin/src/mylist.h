@@ -25,6 +25,12 @@ extern "C"
 #endif
 
     /*
+    ** externs
+    */
+
+    extern void* xmalloc(size_t);
+
+    /*
     ** defines
     */
 

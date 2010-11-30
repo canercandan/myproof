@@ -1,0 +1,30 @@
+GCC=gcc-4.5
+
+PLUGIN_NAME=myproof
+
+PLUGIN_SOURCE_FILES=\
+	plugin_init.c \
+	plugin_ends.c \
+	plugin_summary.c \
+	plugin_pragma.c \
+	mylist.c
+
+PLUGIN_OBJECT_FILES=$(patsubst %.c,%.o,$(PLUGIN_SOURCE_FILES))
+
+GCCPLUGINS_DIR:=$(shell $(GCC) -print-file-name=plugin)
+
+CFLAGS+=-I$(GCCPLUGINS_DIR)/include -fPIC -O2 -I. -std=c99
+LDFLAGS+=
+
+$(PLUGIN_NAME).so: $(PLUGIN_OBJECT_FILES)
+	$(GCC) -shared $^ -o $@
+
+all:	$(PLUGIN_NAME).so
+
+clean:
+	rm -f *o *~
+
+fclean: clean
+	rm -f *.so *.i
+
+re:	fclean $(PLUGIN_NAME).so
