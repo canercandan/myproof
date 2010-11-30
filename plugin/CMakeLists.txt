@@ -2,6 +2,9 @@
 ### 1) Set the application properties
 ######################################################################################
 
+# Checks cmake version compatibility
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
 IF(UNIX)
   SET(CMAKE_C_COMPILER "gcc-4.5")
   SET(CMAKE_CXX_COMPILER "g++-4.5")
@@ -9,10 +12,7 @@ ENDIF()
 
 ENABLE_LANGUAGE(C)
 
-# Checks cmake version compatibility
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-
-PROJECT(myproof)
+PROJECT(plugin)
 
 SET(PROJECT_VERSION_MAJOR 1)
 SET(PROJECT_VERSION_MINOR 0)
@@ -80,32 +80,12 @@ ADD_SUBDIRECTORY(test)
 ######################################################################################
 
 
-
 ######################################################################################
 ### 7) Create executable, link libraries and prepare target
 ######################################################################################
 
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
-ADD_LIBRARY(${PROJECT_NAME} SHARED ${SAMPLE_SRCS})
-#INSTALL(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib COMPONENT libraries)
-
-######################################################################################
-
-
-######################################################################################
-### 8) Install pkg-config config file
-######################################################################################
-
-#INSTALL(FILES ${PROJECT_NAME}.pc DESTINATION lib/pkgconfig COMPONENT headers)
-
-######################################################################################
-
-
-######################################################################################
-### 9) Include packaging
-######################################################################################
-
-#INCLUDE(Packaging.cmake)
+ADD_LIBRARY(myproof SHARED ${SAMPLE_SRCS})
 
 ######################################################################################
