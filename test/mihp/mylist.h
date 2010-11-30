@@ -1,49 +1,20 @@
-// mylist.h --- 
-// 
-// Filename: mylist.h
-// Description: 
-// Author: Caner Candan
-// Maintainer: 
-// Created: Sun Dec 28 16:25:40 2008 (+0200)
-// Version: 
-// Last-Updated: Mon Jan  5 11:05:02 2009 (+0200)
-//           By: Caner Candan
-//     Update #: 69
-// URL: 
-// Keywords: 
-// Compatibility: 
-// 
-// 
-
-// Commentary: 
-// 
-// 
-// 
-// 
-
-// Change log:
-// 
-// 
-// 
-// 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License as
 // published by the Free Software Foundation; either version 3, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; see the file COPYING.  If not, write to
 // the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 // Floor, Boston, MA 02110-1301, USA.
-// 
-// 
-
-// Code:
+//
+// Author: Caner Candan
+//
 
 #ifndef __MYLIST_H__
 # define __MYLIST_H__
@@ -60,6 +31,8 @@ extern "C"
 # ifndef NULL
 #  define NULL	(void*)0
 # endif /* !NULL */
+
+    #define MALLOC xmalloc
 
     /*
     ** type definitions
@@ -109,6 +82,3 @@ extern "C"
 #endif /* !__cplusplus */
 
 #endif /* !__MYLIST_H__ */
-
-// 
-// mylist.h ends here
