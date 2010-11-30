@@ -1,0 +1,5 @@
+Dans la fonction yyerror, insérer exit(0), sinon sortie boucle indéfiniment
+IMPORTANT: Dans le main(), pas de boucle while pour yyparse, la traduction doit stopper dès qu'il détecte une expression incorrecte
+Pour chaque grammaire, insérer return 1;
+
+
