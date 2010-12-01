@@ -1,0 +1,19 @@
+
+
+Partie 3: Construction du profilage
+
+L'objectif de cette partie est de construire un parseur censé analyser les traces de sortie d'exécution du code test.
+Ces traces se présentent sous la forme suivante:
+Appel X à la fonction main() entrée cycle WW sortie cycle YY
+Appel X à la fonction f1() entrée cycle WW sortie cycle YY
+Appel X à la fonction f2() entrée cycle WW sortie cycle YY
+
+Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction mère.
+L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exéution d'une fonction seule.
+Pour celà, nous avons développé un parseur lex et yacc qui reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.
+
+Pour pouvoir construire le profilage exclusif des fonctions, nous avons besoin de connaître l'imbrication des fonctions entre elles.
+Pour celà, nous avons utilisé une représentation sous forme d'abres n-aires. 
+La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). 
+
+
