@@ -31,7 +31,7 @@ extern "C"
 
     // headers used for pragma
 #include "c-pragma.h"
-#include "cpplib.h"
+#include "cpplib.h" // for enum cpp_ttype
     // headers used for pragma end
 
 #include "toplev.h" // warning function
@@ -64,23 +64,12 @@ extern "C"
 	size_t num_all_ops;
     } t_myproof;
 
-    typedef enum
-	{
-	    MYPROOF_PRAGMA_NONE = 0,
-	    MYPROOF_PRAGMA_TEST
-	} t_myproof_pragma_kind;
-
-    typedef enum
-	{
-	    MYPROOF_PRAGMA_CLAUSE_NONE = 0
-	} t_myproof_pragma_clause;
-
     typedef void (*t_myproof_pragma_handler)( cpp_reader* );
 
     typedef struct
     {
-	const char *name;
 	unsigned int id;
+	const char *name;
 	t_myproof_pragma_handler handler;
     } t_myproof_pragma_def;
 
@@ -96,6 +85,14 @@ extern "C"
     void plugin_ends( void *gcc_data, void *user_data );
     void plugin_summary( void *gcc_data, void *user_data );
     void plugin_pragma( void *gcc_data, void *user_data );
+
+    void pragma_instrumentation( cpp_reader* );
+
+    /*
+    ** global variables
+    */
+
+    extern t_myproof *g_myproof_pragma;
 
 #ifdef __cplusplus
 }
