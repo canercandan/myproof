@@ -13,6 +13,8 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 SET(SOURCES
   t-test
   t-pragma
+  t-pragma-error
+  t-pragma-funcs
   )
 
 FOREACH(current ${SOURCES})

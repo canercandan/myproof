@@ -12,7 +12,6 @@ extern "C"
 
     // headers used for gcc plugin
 #include "gcc-plugin.h"
-#include "plugin-version.h"
     // headers used for gcc plugin end
 
     // header files needed by gcc gimple
@@ -31,10 +30,11 @@ extern "C"
 
     // headers used for pragma
 #include "c-pragma.h"
-#include "cpplib.h"
+#include "cpplib.h" // for enum cpp_ttype
     // headers used for pragma end
 
 #include "toplev.h" // warning function
+#include "diagnostic.h" // print_gimple_stmt definition
 
 #include "mylist.h" // get a linked-list
 
@@ -43,50 +43,72 @@ extern "C"
     */
 
     #define MYPROOF_PRAGMA_SPACE "myproof"
+    #define MYPROOF_NAME_SIZE 128
 
     /*
     ** type definitions
     */
 
-    typedef struct s_myproof_variable
+    /* variable structure */
+    typedef struct
     {
-	char name[128];
+	char name[MYPROOF_NAME_SIZE];
 	size_t size;
 	size_t IR;
 	size_t IW;
 	size_t FR;
 	size_t FW;
-    } t_variable;
+	size_t visited;
+	size_t modified;
+    } t_myproof_variable;
 
+    /* function structure */
     typedef struct
     {
+	char name[MYPROOF_NAME_SIZE];
+	size_t visited;
 	t_mylist *variables;
+    } t_myproof_function;
+
+    /* function instrumenting structure */
+    typedef struct
+    {
+	char name[MYPROOF_NAME_SIZE];
+    } t_myproof_instrumente_function;
+
+    /* main structure */
+    typedef struct
+    {
+	t_mylist *functions;
+	t_mylist *instrumente_functions;
 	size_t num_all_ops;
     } t_myproof;
 
-    typedef enum
-	{
-	    MYPROOF_PRAGMA_NONE = 0,
-	    MYPROOF_PRAGMA_TEST
-	} t_myproof_pragma_kind;
-
-    typedef enum
-	{
-	    MYPROOF_PRAGMA_CLAUSE_NONE = 0
-	} t_myproof_pragma_clause;
-
+    /* prototype function for pragmas */
     typedef void (*t_myproof_pragma_handler)( cpp_reader* );
 
+    /* pragma definition structure */
     typedef struct
     {
+	// unsigned int id;
 	const char *name;
-	unsigned int id;
 	t_myproof_pragma_handler handler;
     } t_myproof_pragma_def;
 
-    /*
-    ** structures
-    */
+    /* prototype function for pragmas */
+    typedef unsigned int (*t_myproof_pass_handler)();
+
+    /* pass definition structure */
+    typedef struct
+    {
+	// unsigned int id;
+	unsigned int pass;
+	const char *name;
+	t_myproof_pass_handler execute;
+	const char *reference_pass_name;
+	unsigned int ref_pass_instance_number;
+	unsigned int pos_op;
+    } t_myproof_pass_def;
 
     /*
     ** functions
@@ -95,7 +117,23 @@ extern "C"
     int plugin_init( struct plugin_name_args*, struct plugin_gcc_version* );
     void plugin_ends( void *gcc_data, void *user_data );
     void plugin_summary( void *gcc_data, void *user_data );
+    void plugin_error( void *gcc_data, void *user_data );
     void plugin_pragma( void *gcc_data, void *user_data );
+    void plugin_pass( struct plugin_name_args*, t_myproof* );
+
+    void pragma_instrumente( cpp_reader* );
+
+    unsigned int pass_generic();
+    unsigned int pass_verbose();
+    unsigned int pass_instrumente();
+    unsigned int pass_function();
+
+    /*
+    ** global variables
+    */
+
+    extern t_myproof *g_myproof_pragma;
+    extern t_myproof *g_myproof_pass;
 
 #ifdef __cplusplus
 }

@@ -51,7 +51,7 @@ IF(UNIX)
   INCLUDE_DIRECTORIES(/usr/lib/gcc/i686-linux-gnu/4.5.1/plugin/include) # will be replaced by `${CMAKE_C_COMPILER} -print-file-name=plugin`
 
   # enable warnings
-  ADD_DEFINITIONS( -Wall -W -Wextra )
+  ADD_DEFINITIONS( -Wall -W ) #-Wextra )
   ADD_DEFINITIONS( -O2 )
   ADD_DEFINITIONS( -fPIC )
 ENDIF()
