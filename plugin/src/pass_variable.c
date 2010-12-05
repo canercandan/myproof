@@ -43,7 +43,7 @@ static t_myproof_variable *create_variable_struct( const char *name )
     return variable;
 }
 
-static void read_data( tree t, t_myproof_function *function )
+static t_myproof_variable *read_data( tree t, t_myproof_function *function )
 {
     char identifier[MYPROOF_NAME_SIZE];
 
@@ -56,13 +56,17 @@ static void read_data( tree t, t_myproof_function *function )
 	    sprintf(identifier, "%c_%u", ( TREE_CODE(t) == CONST_DECL ) ? 'C' : 'D', DECL_UID(t) );
 	}
 
-    if ( mylist_find( function->variables, variable_exists, (void*)identifier ) == NULL )
+    t_myproof_variable *variable = mylist_find( function->variables, variable_exists, (void*)identifier );
+
+    if ( variable == NULL )
 	{
-	    printf("variable to be pushed: %s\n", identifier);
-	    mylist_push( &(function->variables), create_variable_struct( identifier ) );
+	    variable = create_variable_struct( identifier );
+	    mylist_push( &(function->variables), variable );
 	}
 
     read_type ( TREE_TYPE(t), function );
+
+    return variable;
 }
 
 static void read_operand( tree t, t_myproof_function *function )

@@ -8,24 +8,15 @@ static t_mylist_res function_exists( void *data, void *user_data )
     return ( (!strcmp(function->name, user_data)) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE );
 }
 
-/* static t_mylist_res list_functions( void *data ) */
-/* { */
-/*     t_myproof_instrumente_function* function = data; */
-/*     printf("current function name: %s\n", function->name); */
-/*     return MYLIST_R_CONTINUE; */
-/* } */
-
 static void create_function( tree t )
 {
     const char *identifier = IDENTIFIER_POINTER(t); // look at gimple parsing
     t_mylist *functions = g_myproof_pragma->instrumente_functions;
-    if ( mylist_all_data( functions, function_exists, (void*)identifier ) == MYLIST_R_CONTINUE )
+    if ( mylist_find( functions, function_exists, (void*)identifier ) == NULL )
 	{
 	    t_myproof_instrumente_function *function = xmalloc( sizeof( *function ) );
 	    strcpy( function->name, identifier );
 	    mylist_push( &( g_myproof_pragma->instrumente_functions), (void*)function );
-	    /* printf("function \'%s\' added\n", identifier); */
-	    /* mylist_all( g_myproof_pragma->instrumente_functions, list_functions ); */
 	}
 }
 

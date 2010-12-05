@@ -64,11 +64,11 @@ static void read_data( tree t )
 {
     if ( DECL_NAME(t) )
 	{
-	    /* printf ( "       data \'%s\'\n", IDENTIFIER_POINTER(DECL_NAME(t)) ); */
+	    printf ( "       data \'%s\'\n", IDENTIFIER_POINTER(DECL_NAME(t)) );
 	}
     else
 	{
-	    /* printf ( "       data \'%c_%u\'\n", (TREE_CODE(t)==CONST_DECL)?'C':'D', DECL_UID(t) ); */
+	    printf ( "       data \'%c_%u\'\n", (TREE_CODE(t)==CONST_DECL)?'C':'D', DECL_UID(t) );
 	}
 
     read_type ( TREE_TYPE(t) );
@@ -161,8 +161,6 @@ static void read_stmt( gimple g )
 	    if ( tc == REAL_TYPE )
 		{
 		    //debug_tree(type1);
-		    //fprintf( stderr, "toto\n" );
-		    /* write(1, "toto\n", 5); */
 		    /* printf("this is a real variable\n"); */
 		}
 
@@ -247,7 +245,7 @@ unsigned int pass_generic()
 
 	for ( gsi = gsi_start_bb(bb); !gsi_end_p(gsi); gsi_next(&gsi) )
 	    {
-		/* print_gimple_stmt ( stdout, gsi_stmt(gsi), 0, 0 ); */
+		print_gimple_stmt ( stdout, gsi_stmt(gsi), 0, 0 );
 		read_stmt( gsi_stmt(gsi) );
 	    }
     }
