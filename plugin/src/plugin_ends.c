@@ -1,19 +1,28 @@
 #include "myproof.h"
 
-static t_mylist_res removeall_variable_list(void *data)
+static t_mylist_res removeall_node(void *data)
 {
+    free(data);
+    return MYLIST_R_CONTINUE;
+}
+
+static t_mylist_res removeall_functions(void *data)
+{
+    t_myproof_function *function = data;
+    mylist_all(function->variables, removeall_node);
     free(data);
     return MYLIST_R_CONTINUE;
 }
 
 static void free_myproof_struct( t_myproof *myproof )
 {
-    mylist_all(myproof->variables, removeall_variable_list);
-    mylist_free( &(myproof->variables) );
+    mylist_all(myproof->functions, removeall_functions);
+    mylist_all(myproof->instrumente_functions, removeall_node);
     free(myproof);
 }
 
 void plugin_ends( void *gcc_data, void *user_data ) //t_myproof*
 {
+    (void)gcc_data;
     free_myproof_struct(user_data);
 }

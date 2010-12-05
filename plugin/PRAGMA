@@ -1,0 +1,5 @@
+1) dans plugin pragma: on collecte tous les fonctions a instrumenter dans une liste
+
+2) dans plugin gimple: on verifie a chaque passe si la fonction figure dans la liste des fonctions a instrumenter. si oui on ajoute au debut et a la fin du code de la fonction des appels de mesure de la lib myproof
+
+3) dans plugin ends: on verifie si toutes les fonctions a instrumenter on été appelé en moins une fois dans plugin gimple (on insere un compteur visited dans la structure des fonctions a instrumenter).

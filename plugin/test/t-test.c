@@ -4,7 +4,9 @@ unsigned int
 syracuse ( int N )
 {
   int n = N;
-  unsigned int a, b, c;
+  unsigned int a, b, c = 0;
+  (void)a;
+  (void)b;
 
   while ( n != 1 )
     {

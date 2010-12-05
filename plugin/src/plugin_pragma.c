@@ -3,17 +3,18 @@
 t_myproof *g_myproof_pragma; // global to be available from pragmas
 
 static const t_myproof_pragma_def pragmas[] = {
-    { 0, "instrumentation", pragma_instrumentation }
+    { "instrumente", pragma_instrumente }
 };
 
 // we're registering our pragmas
 void plugin_pragma( void *gcc_data, void *user_data ) //t_myproof*
 {
+    (void)gcc_data;
     const int n_pragmas = sizeof(pragmas) / sizeof(*pragmas);
     int i;
 
     g_myproof_pragma = user_data;
-    warning (0, "Loop to register pragmas");
+    warning(0, "Loop to register pragmas");
 
     for (i = 0; i < n_pragmas; ++i)
 	{
