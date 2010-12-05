@@ -1,21 +1,6 @@
 #include "myproof.h"
 
-/* static t_mylist_res function_exists( void *data, void *user_data ) */
-/* { */
-/*     t_myproof_instrumente_function* function = data; */
-/*     return ( !strcmp(function->name, user_data) ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE; */
-/* } */
-
-/*
- * Here's some callbacks used by mylist
- */
-/* static t_mylist_res find_name_in_mylist( void *current_data_in_mylist, void *data ) */
-/* { */
-/*     t_mydata* my_current_data_in_mylist = current_data_in_mylist; */
-/*     t_mydata* mydata = data; */
-
-/*     return ( (strcmp(my_current_data_in_mylist->name, mydata->name) == 0) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE ); */
-/* } */
+static const char *context = "pass generic";
 
 static int get_type_size( tree t )
 {
@@ -79,13 +64,7 @@ static void read_data( tree t )
 {
     if ( DECL_NAME(t) )
 	{
-	    /* if ( mylist_all_data( mylist, find_name_in_mylist, (void*)IDENTIFIER_POINTER(DECL_NAME(t)) ) == MYLIST_R_CONTINUE ) */
-	    /* 	{ */
-	    /* 	    t_mydata *mydata = xmalloc( sizeof(*mydata) ); */
-	    /* 	    strcpy(mydata->name, IDENTIFIER_POINTER(DECL_NAME(t))); */
-	    /* 	    mylist_push( &mylist, mydata ); */
 	    /* printf ( "       data \'%s\'\n", IDENTIFIER_POINTER(DECL_NAME(t)) ); */
-		/* } */
 	}
     else
 	{
@@ -255,7 +234,7 @@ static void read_loop( struct loop *l )
 
 unsigned int pass_generic()
 {
-    printf("pass_generic\n");
+    warning(0, "%<%s%>", context);
 
     basic_block bb;
     gimple_stmt_iterator gsi;
@@ -271,7 +250,6 @@ unsigned int pass_generic()
 		/* print_gimple_stmt ( stdout, gsi_stmt(gsi), 0, 0 ); */
 		read_stmt( gsi_stmt(gsi) );
 	    }
-
     }
 
     /* recursively read loops */

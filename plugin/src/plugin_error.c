@@ -10,7 +10,7 @@ static t_mylist_res for_each_instrumente_function( void *data, void *user_data )
 {
     t_myproof *myproof = user_data;
     t_myproof_instrumente_function* instrumente_function = data;
-    if ( mylist_all_data( myproof->functions, function_exists, instrumente_function->name ) == MYLIST_R_CONTINUE )
+    if ( mylist_find( myproof->functions, function_exists, instrumente_function->name ) == NULL )
 	{
 	    fprintf( stderr, "%s does not exist\n", instrumente_function->name );
 	}

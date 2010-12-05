@@ -2,16 +2,17 @@
 
 t_myproof *g_myproof_pass; // global to be available from passes
 
-static bool dummy_gate(void) { return true; }
-
 static const t_myproof_pass_def passes[] = {
-    /* { GIMPLE_PASS, "generic", pass_generic, "mudflap2", 0, PASS_POS_INSERT_AFTER }, */
-    { GIMPLE_PASS, "instrumente", pass_instrumente, "mudflap2", 0, PASS_POS_INSERT_AFTER },
-    { GIMPLE_PASS, "function", pass_function, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     /* { GIMPLE_PASS, "verbose", pass_verbose, "mudflap2", 0, PASS_POS_INSERT_AFTER }, */
+    { GIMPLE_PASS, "generic", pass_generic, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "function", pass_function, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "variable", pass_variable, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "instrumente", pass_instrumente, "mudflap2", 0, PASS_POS_INSERT_AFTER },
 };
 
 static struct opt_pass option_passes[sizeof(passes) / sizeof(*passes)];
+
+static bool dummy_gate(void) { return true; }
 
 void plugin_pass( struct plugin_name_args *info, t_myproof *myproof )
 {
@@ -21,7 +22,7 @@ void plugin_pass( struct plugin_name_args *info, t_myproof *myproof )
     g_myproof_pass = myproof;
     warning(0, "Loop to register passes");
 
-    for (i = 0; i < n_passes; ++i)
+    for (i = n_passes - 1; i >= 0; --i)
 	{
 	    // common opt_pass structure configuration
 	    option_passes[i].gate = dummy_gate;

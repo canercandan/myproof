@@ -1,5 +1,7 @@
 #include "myproof.h"
 
+static const char *context = "pass verbose";
+
 static int get_type_size( tree t )
 {
     int ret = 0;
@@ -201,7 +203,7 @@ static void read_loop( struct loop *l )
 
 unsigned int pass_verbose()
 {
-    printf("pass_verbose\n");
+    warning(0, "%<%s%>", context);
 
     basic_block bb;
     gimple_stmt_iterator gsi;

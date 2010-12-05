@@ -127,6 +127,7 @@ extern "C"
     unsigned int pass_verbose();
     unsigned int pass_instrumente();
     unsigned int pass_function();
+    unsigned int pass_variable();
 
     /*
     ** global variables

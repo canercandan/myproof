@@ -16,7 +16,8 @@
 // Author: Caner Candan
 //
 
-#include <stdlib.h>
+#include <stdlib.h> // allocation
+#include <string.h> // strcmp
 #include "mylist.h"
 
 t_mylist_res mylist_all(t_mylist *t, mylist_fct fct)
@@ -68,6 +69,51 @@ t_mylist_res mylist_all_struct(t_mylist *t, mylist_fct_struct fct, void *data)
 	    t = next;
 	}
     return (res);
+}
+
+void *mylist_find(t_mylist *t, mylist_fct_data fct, void *key)
+{
+    t_mylist *next;
+    t_mylist_res res;
+
+    res = MYLIST_R_CONTINUE;
+    while (t != NULL)
+	{
+	    next = t->next;
+	    res = (*fct)(t->data, key);
+	    if (res != MYLIST_R_CONTINUE)
+		return (t->data);
+	    t = next;
+	}
+    return (NULL);
+}
+
+char *mylist_find_string(t_mylist *t, const char *key)
+{
+    t_mylist *next;
+
+    while (t != NULL)
+	{
+	    next = t->next;
+	    if (!strcmp(t->data, key))
+		return (t->data);
+	    t = next;
+	}
+    return (NULL);
+}
+
+int mylist_find_integer(t_mylist *t, int key)
+{
+    t_mylist *next;
+
+    while (t != NULL)
+	{
+	    next = t->next;
+	    if ((int)t->data == key)
+		return ((int)t->data);
+	    t = next;
+	}
+    return (-1);
 }
 
 int mylist_count(t_mylist *t)

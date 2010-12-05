@@ -88,6 +88,8 @@ static const t_instrumente_token tokens[] = {
 
 void pragma_instrumente( cpp_reader *parse_in )
 {
+    warning(OPT_Wpragmas, "%<%s%>", context);
+
     tree t = 0;
     enum cpp_ttype token = pragma_lex( &t );
 

@@ -81,6 +81,10 @@ extern "C"
     t_mylist_res mylist_all_data(t_mylist*, mylist_fct_data, void *data);
     t_mylist_res mylist_all_struct(t_mylist*, mylist_fct_struct, void *data);
 
+    void *mylist_find(t_mylist*, mylist_fct_data, void *key);
+    char *mylist_find_string(t_mylist*, const char *key);
+    int mylist_find_integer(t_mylist*, int key);
+
     int mylist_count(t_mylist*);
 
 #ifdef __cplusplus
