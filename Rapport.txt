@@ -1,19 +1,39 @@
+Pour ce qui concerne les différentes phases d'instrumentation, nous avons choisi de développer un plugin, ce qui permet d'enrichir les fonctionnalités de GCC sans pour autant avoir à le recompiler.
 
+Partie 1: Instrumentation dynamique
+
+Le but de cette partie est de produire une trace statique des fonctions à instrumenter, à savoir une vision des accès mémoire du code. Ces accès mémoire se traduisent par les instruction load et store effectués. Un load est détectée lorsque le contenu d'un tableau est affectée à une variable, un store quand un tableau récupère la valeur d'une variable.
+
+Pour cette tâche, une passe a été insérée dans notre plugin, et se sert de la représentation intermédiaire gimple. gimple nous donne des informations sur le nombre, l'emplacement et le type des instructions du code source analysé. La fonction myprof_main() du fichier myprof.c est appelée chaque fois qu'une fonction du code à tester est analysée.
+
+myprof_main() parcourt les blocs de base de la fonction instrumentée, et y lit ses statements. Les éventuelles boucles sont gérées par la fonction myprof_read_loop.
+Pour chaque ligne du bloc de base rencontrée, la fonction myprof_read_stmt() est appelée. Cette fonction permet de savoir si le statement correspond à un appel de fonction, un retour, une condition, ou plus simplement une affectation (GIMPLE_ASSIGN). C'est ce dernier cas qui nous intéresse.
+Ensuite, nous avons besoin de savoir de quel côté de l'égalité nous sommes. myprof_read_stmt() nous donne également la position de l'opérande (à droite ou à gauche de l'égalité. La fonction mihp_read_operand(), quant à elle, détermine le type rencontré (en l'occurence, celui qui nous intéresse est ARRAY_REF). 
+
+La fonction my_prof_read_loop() permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances. 
+ 
 
 Partie 3: Construction du profilage
 
 L'objectif de cette partie est de construire un parseur censé analyser les traces de sortie d'exécution du code test.
 Ces traces se présentent sous la forme suivante:
-Appel X à la fonction main() entrée cycle WW sortie cycle YY
-Appel X à la fonction f1() entrée cycle WW sortie cycle YY
-Appel X à la fonction f2() entrée cycle WW sortie cycle YY
+Appel X à la fonction main entrée cycle WW sortie cycle YY
+Appel X à la fonction f1 entrée cycle WW sortie cycle YY
+Appel X à la fonction f2 entrée cycle WW sortie cycle YY
 
 Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction mère.
-L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exéution d'une fonction seule.
-Pour celà, nous avons développé un parseur lex et yacc qui reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.
+L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.
+Pour celà, nous avons développé un parseur lex et yacc qui consomme et reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.
 
 Pour pouvoir construire le profilage exclusif des fonctions, nous avons besoin de connaître l'imbrication des fonctions entre elles.
 Pour celà, nous avons utilisé une représentation sous forme d'abres n-aires. 
-La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). 
+La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeud précédents, en fonction des temps d'entrée et de sortie de la fonction. 
+Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. 
+
+L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces. 
+L'analyseur enregistre également les différentes instances d'une même fonction dans une structure à part.
+
+Enfin, l'outil propose également une corrélation entre les sorties statique et dynamique en analysant le fichier de traces statique.
+
 
 
