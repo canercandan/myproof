@@ -29,6 +29,9 @@ static int get_size( tree t )
 	case REAL_TYPE:
 	    size = get_type_size( t ); break;
 
+	case POINTER_TYPE:
+	    break;
+
 	default:
 	    fprintf( stderr, "myproof: get_size(): %s is not handled\n", tree_code_name[tc] );
 	    gcc_unreachable( );

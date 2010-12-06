@@ -17,6 +17,9 @@ static void read_type( tree t, t_myproof_function *function )
 	    /* scalar */
 	    break;
 
+	case POINTER_TYPE:
+	    break;
+
 	default:
 	    fprintf( stderr, "myproof: read_type(): %s is not handled\n", tree_code_name[tc] );
 	    gcc_unreachable( );
@@ -66,11 +69,14 @@ static t_myproof_variable *read_data( tree t, t_myproof_function *function )
 
     read_type ( TREE_TYPE(t), function );
 
+    variable->size++;
+
     return variable;
 }
 
-static void read_operand( tree t, t_myproof_function *function )
+static t_myproof_variable *read_operand( tree t, t_myproof_function *function )
 {
+    t_myproof_variable *variable = NULL;
     enum tree_code tc;
 
     tc = TREE_CODE( t );
@@ -80,12 +86,12 @@ static void read_operand( tree t, t_myproof_function *function )
 	case VAR_DECL:
 	case PARM_DECL:
 	case CONST_DECL:
-	    read_data( t, function );
+	    variable = read_data( t, function );
 	    break;
 
 	case ARRAY_REF:
 	    read_operand( TREE_OPERAND(t,0), function ); /* array base */
-	    read_operand( TREE_OPERAND(t,1), function ); /* array index */
+	    variable = read_operand( TREE_OPERAND(t,1), function ); /* array index */
 	    break;
 
 	case ADDR_EXPR:
@@ -100,7 +106,7 @@ static void read_operand( tree t, t_myproof_function *function )
 	    break;
 
 	case SSA_NAME:
-	    read_data( SSA_NAME_VAR(t), function );
+	    variable = read_data( SSA_NAME_VAR(t), function );
 	    break;
 
 	case COND_EXPR:
@@ -110,6 +116,8 @@ static void read_operand( tree t, t_myproof_function *function )
 	    fprintf( stderr, "myproof: read_operand(): unhandled \'%s\'\n", tree_code_name[tc] );
 	    gcc_unreachable( );
 	}
+
+    return variable;
 }
 
 static void read_stmt( gimple g, t_myproof_function *function )
@@ -122,14 +130,28 @@ static void read_stmt( gimple g, t_myproof_function *function )
     switch ( gc )
 	{
 	case GIMPLE_ASSIGN:
-	    read_operand( gimple_op(g,1), function ); /* op1 */
+	    {
+		t_myproof_variable *op1 = read_operand( gimple_op(g,1), function ); /* op1 */
+		if ( op1 )
+		    {
+			op1->visited++;
+		    }
 
-	    if ( gimple_num_ops(g) > 2 ) /* op2 */
-		{
-		    read_operand( gimple_op(g,2), function );
-		}
+		if ( gimple_num_ops(g) > 2 ) /* op2 */
+		    {
+			t_myproof_variable *op2 = read_operand( gimple_op(g,2), function );
+			if ( op2 )
+			    {
+				op2->visited++;
+			    }
+		    }
 
-	    read_operand( gimple_op(g,0), function ); /* op def */
+		t_myproof_variable *opdef = read_operand( gimple_op(g,0), function ); /* op def */
+		if ( opdef )
+		    {
+			opdef->modified++;
+		    }
+	    }
 	    break;
 
 	case GIMPLE_CALL:

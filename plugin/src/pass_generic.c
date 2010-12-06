@@ -54,6 +54,9 @@ static void read_type( tree t )
 
 	    break;
 
+	case POINTER_TYPE:
+	    break;
+
 	default:
 	    fprintf( stderr, "myproof: read_type(): %s is not handled\n", tree_code_name[tc] );
 	    gcc_unreachable( );
@@ -245,7 +248,7 @@ unsigned int pass_generic()
 
 	for ( gsi = gsi_start_bb(bb); !gsi_end_p(gsi); gsi_next(&gsi) )
 	    {
-		print_gimple_stmt ( stdout, gsi_stmt(gsi), 0, 0 );
+		//print_gimple_stmt ( stdout, gsi_stmt(gsi), 0, 0 );
 		read_stmt( gsi_stmt(gsi) );
 	    }
     }
