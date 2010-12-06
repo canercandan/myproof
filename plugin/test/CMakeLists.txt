@@ -9,6 +9,7 @@ IF(UNIX)
 ENDIF()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/../lib/debug/lib)
 
 SET(SOURCES
   t-test
@@ -20,7 +21,7 @@ SET(SOURCES
 FOREACH(current ${SOURCES})
   ADD_EXECUTABLE(${current} ${current}.c)
   ADD_TEST(${current} ${current})
-  TARGET_LINK_LIBRARIES(${current} m)
+  TARGET_LINK_LIBRARIES(${current} m myproof)
 ENDFOREACH()
 
 ######################################################################################

@@ -26,8 +26,6 @@ tree create_function_call( const char *fname, const char *arg )
     return build_function_call_expr( UNKNOWN_LOCATION, fndecl, fargs );
 }
 
-// http://svn.gna.org/svn/gsc/branches/hello-world/5-debug/hello1.c
-
 unsigned int pass_instrumente()
 {
     warning(0, "%<%s%>", context);
@@ -41,9 +39,7 @@ unsigned int pass_instrumente()
 	    return 0;
 	}
 
-    //debug_tree( t );
-
-    tree call = create_function_call( "test", "toto" );
+    tree call = create_function_call( "myproof_start", identifier );
 
     gimple stmt = gimple_build_call_from_tree( call );
 
