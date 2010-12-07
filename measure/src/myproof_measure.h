@@ -36,7 +36,7 @@ extern "C"
     void myproof_measure_start( const char *fname );
     void myproof_measure_stop();
 
-    inline unsigned long myproof_measure_rdtsc() { __asm__ ("xor %eax, %eax; cpuid; rdtsc"); }
+    inline unsigned long myproof_measure_rdtsc();
 
     /*
     ** global variables

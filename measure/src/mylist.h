@@ -32,7 +32,7 @@ extern "C"
 #  define NULL	(void*)0
 # endif /* !NULL */
 
-    #define MALLOC malloc
+#define MALLOC malloc
 
     /*
     ** type definitions

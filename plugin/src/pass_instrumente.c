@@ -8,8 +8,9 @@ static t_mylist_res function_exists( void *data, void *user_data )
     return ( !strcmp(function->name, user_data) ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
 }
 
-tree create_function_call( const char *fname, const char *arg )
+static tree create_start_call( const char *arg )
 {
+    const char *fname = "myproof_measure_start";
     tree ftype = build_function_type_list( void_type_node /*return*/, ptr_type_node /*first arg*/, NULL_TREE );
     tree fndecl = build_fn_decl( fname, ftype );
     tree fs = build_string( strlen(arg) + 1, arg );
@@ -26,6 +27,19 @@ tree create_function_call( const char *fname, const char *arg )
     return build_function_call_expr( UNKNOWN_LOCATION, fndecl, fargs );
 }
 
+static tree create_stop_call()
+{
+    const char *fname = "myproof_measure_stop";
+    tree ftype = build_function_type_list( void_type_node /*return*/, NULL_TREE );
+    tree fndecl = build_fn_decl( fname, ftype );
+
+    DECL_ASSEMBLER_NAME( fndecl );
+
+    //tree fargs = tree_cons( NULL_TREE, fs, NULL_TREE );
+
+    return build_function_call_expr( UNKNOWN_LOCATION, fndecl, NULL_TREE );
+}
+
 unsigned int pass_instrumente()
 {
     warning(0, "%<%s%>", context);
@@ -39,45 +53,19 @@ unsigned int pass_instrumente()
 	    return 0;
 	}
 
-    tree call = create_function_call( "myproof_start", identifier );
+    tree start_call = create_start_call( identifier );
+    tree stop_call = create_stop_call( identifier );
 
-    gimple stmt = gimple_build_call_from_tree( call );
+    gimple start_stmt = gimple_build_call_from_tree( start_call );
+    gimple stop_stmt = gimple_build_call_from_tree( stop_call );
 
-    debug_gimple_stmt( stmt );
+    debug_gimple_stmt( start_stmt );
+    debug_gimple_stmt( stop_stmt );
 
     basic_block bb = cfun->cfg->x_entry_block_ptr->next_bb;
     gimple_stmt_iterator gsi = gsi_start_bb( bb );
-    gsi_insert_before( &gsi, stmt, GSI_SAME_STMT );
-
-    //debug_tree( t );
-
-    //gimple_build_call_from_tree( test_fndecl );
-
-    //dump_function( TDI_original, test_fndecl );
-    //gimplify_function_tree( test_fndecl );
-    //dump_function( TDI_original, test_fndecl );
-
-    /* debug_tree(t); */
-
-    fprintf( stderr, "* MYPROOF on %s()\n", identifier );
-
-    // gsi_insert_on_edge_immediate
-
-    /* basic_block bb; */
-
-    /* FOR_EACH_BB( bb ) */
-    /* { */
-    /* 	edge e; */
-    /* 	edge_iterator ei; */
-
-    /* 	FOR_EACH_EDGE (e, ei, bb->succs) */
-    /* 	    { */
-    /* 		if (e->flags & EDGE_FALLTHRU) */
-    /* 		    { */
-    /* 			break; */
-    /* 		    } */
-    /* 	    } */
-    /* } */
+    gsi_insert_before( &gsi, start_stmt, GSI_SAME_STMT );
+    gsi_insert_before( &gsi, stop_stmt, GSI_SAME_STMT );
 
     return 0;
 }

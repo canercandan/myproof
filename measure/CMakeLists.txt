@@ -12,7 +12,7 @@ ENDIF()
 
 ENABLE_LANGUAGE(C)
 
-PROJECT(measure)
+PROJECT(myproof_measure)
 
 SET(PROJECT_VERSION_MAJOR 1)
 SET(PROJECT_VERSION_MINOR 0)
@@ -72,7 +72,7 @@ SET(SAMPLE_SRCS)
 
 ADD_SUBDIRECTORY(src)
 #ADD_SUBDIRECTORY(application)
-# ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(test)
 #ADD_SUBDIRECTORY(doc)
 
 ######################################################################################
