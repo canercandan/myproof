@@ -10,7 +10,6 @@ extern "C"
     ** headers
     */
 
-#include <stdint.h>
 #include "mylist.h"
 
     /*
