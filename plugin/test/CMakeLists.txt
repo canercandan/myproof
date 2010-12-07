@@ -9,9 +9,7 @@ IF(UNIX)
 ENDIF()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/../measure/debug/lib)
-
-MESSAGE(STATUS ${CMAKE_SOURCE_DIR}/../measure/debug/lib)
+LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
 SET(SOURCES
   t-test
@@ -23,7 +21,7 @@ SET(SOURCES
 FOREACH(current ${SOURCES})
   ADD_EXECUTABLE(${current} ${current}.c)
   ADD_TEST(${current} ${current})
-  TARGET_LINK_LIBRARIES(${current} m myproof_measure)
+  TARGET_LINK_LIBRARIES(${current} myproof_measure m)
 ENDFOREACH()
 
 ######################################################################################

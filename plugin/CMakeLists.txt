@@ -5,6 +5,8 @@
 # Checks cmake version compatibility
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
+INCLUDE(install.cmake)
+
 IF(UNIX)
   SET(CMAKE_C_COMPILER "gcc-4.5")
   SET(CMAKE_CXX_COMPILER "g++-4.5")
@@ -48,7 +50,7 @@ INCLUDE_DIRECTORIES(
 ######################################################################################
 
 IF(UNIX)
-  INCLUDE_DIRECTORIES(/usr/lib/gcc/i686-linux-gnu/4.5.1/plugin/include) # will be replaced by `${CMAKE_C_COMPILER} -print-file-name=plugin`
+  INCLUDE_DIRECTORIES(${PLUGIN_DIR}) # will be replaced by `${CMAKE_C_COMPILER} -print-file-name=plugin`
 
   # enable warnings
   ADD_DEFINITIONS( -Wall -W ) #-Wextra )
@@ -72,6 +74,7 @@ SET(SAMPLE_SRCS)
 ### 6) Now where we go ?
 ######################################################################################
 
+ADD_SUBDIRECTORY(measure)
 ADD_SUBDIRECTORY(src)
 #ADD_SUBDIRECTORY(application)
 ADD_SUBDIRECTORY(test)
