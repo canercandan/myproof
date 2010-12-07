@@ -1,0 +1,7 @@
+~ TODO ~
+- integrer notion basic block dans structure function (C)
+- avoir un compteur de basicblock dans structure function (C)
+- finir le script (C)
+- finir le rapport (A)
+- generer un CFG (soit de basicblocks soit par fonction) (C)
+- faire la partie 4 (multithreading) (A)
