@@ -5,10 +5,7 @@
 # Checks cmake version compatibility
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(UNIX)
-  SET(CMAKE_C_COMPILER "gcc-4.5")
-  SET(CMAKE_CXX_COMPILER "g++-4.5")
-ENDIF()
+INCLUDE(install.cmake)
 
 ENABLE_LANGUAGE(C)
 
