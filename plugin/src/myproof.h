@@ -86,7 +86,6 @@ extern "C"
 	char name[MYPROOF_NAME_SIZE];
 	t_mylist *variables;
 	t_mylist *basicblocks;
-	t_mylist *loops;
 	t_mylist *edges;
     } t_myproof_function;
 

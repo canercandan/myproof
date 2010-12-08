@@ -37,18 +37,37 @@ static t_mylist_res print_instrumente_functions( void *data )
     return MYLIST_R_CONTINUE;
 }
 
-static void print_part1_functions( void *data, void *user_data )
+static t_mylist_res print_part1_basicblocks( void *data, void *user_data )
+{
+    t_myproof_basicblock *bb = data;
+    FILE *output = user_data;
+    if ( bb->loop == NULL )
+	{
+	    if ( bb->nload > 0 ) { fprintf(output, "%u load\n", bb->nload); }
+	    if ( bb->nstore > 0 ) { fprintf(output, "%u store\n", bb->nstore); }
+	}
+    else
+	{
+	    if ( bb->nload > 0 ) { fprintf(output, "%u * %u load\n", bb->nload, bb->loop->niteration); }
+	    if ( bb->nstore > 0 ) { fprintf(output, "%u * %u store\n", bb->nstore, bb->loop->niteration); }
+	}
+    return MYLIST_R_CONTINUE;
+}
+
+static t_mylist_res print_part1_functions( void *data, void *user_data )
 {
     t_myproof_function *function = data;
     FILE *output = user_data;
     fprintf(output, "fonction %s\n", function->name);
+    mylist_all_data( function->basicblocks, print_part1_basicblocks, (void*)output);
+    return MYLIST_R_CONTINUE;
 }
 
 static void print_part1( t_mylist *functions )
 {
     FILE *output = fopen("instrumentation.txt", "w");
 
-    //mylist_all_data( functions, print_part1_functions, (void*)output );
+    mylist_all_data( functions, print_part1_functions, (void*)output );
 
     fclose( output );
 }

@@ -14,7 +14,6 @@ static t_myproof_function *create_function_struct( const char *name )
     strcpy( function->name, name );
     mylist_init( &(function->variables) );
     mylist_init( &(function->basicblocks) );
-    mylist_init( &(function->loops) );
     mylist_init( &(function->edges) );
     return function;
 }
