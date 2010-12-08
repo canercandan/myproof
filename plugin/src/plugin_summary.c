@@ -10,7 +10,7 @@ t_mylist_res print_variables( void *data )
 t_mylist_res print_basicblocks( void *data )
 {
     t_myproof_basicblock *basicblock = data;
-    printf("  * BB: %u\n", basicblock->index);
+    printf("  * BB { index: %u, nload: %u, nstore: %u }\n", basicblock->index, basicblock->nload, basicblock->nstore);
     mylist_all( basicblock->variables, print_variables );
     return MYLIST_R_CONTINUE;
 }

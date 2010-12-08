@@ -18,6 +18,8 @@ static t_myproof_basicblock *create_basicblock_struct( const unsigned int index 
 {
     t_myproof_basicblock *basicblock = xmalloc( sizeof(*basicblock) );
     basicblock->index = index;
+    basicblock->nload = 0;
+    basicblock->nstore = 0;
     mylist_init( &(basicblock->variables) );
     return basicblock;
 }

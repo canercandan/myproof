@@ -74,7 +74,7 @@ static t_myproof_variable *read_data( tree t, t_myproof_basicblock *basicblock )
     return variable;
 }
 
-static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicblock )
+static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicblock, bool store )
 {
     t_myproof_variable *variable = NULL;
     enum tree_code tc;
@@ -90,8 +90,18 @@ static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicbloc
 	    break;
 
 	case ARRAY_REF:
-	    read_operand( TREE_OPERAND(t,0), basicblock ); /* array base */
-	    variable = read_operand( TREE_OPERAND(t,1), basicblock ); /* array index */
+	    read_operand( TREE_OPERAND(t,0), basicblock, false ); /* array base */
+	    variable = read_operand( TREE_OPERAND(t,1), basicblock, false ); /* array index */
+
+	    if ( store == true )
+		{
+		    basicblock->nstore++;
+		}
+	    else
+		{
+		    basicblock->nload++;
+		}
+
 	    break;
 
 	case ADDR_EXPR:
@@ -131,25 +141,28 @@ static void read_stmt( gimple g, t_myproof_basicblock *basicblock )
 	{
 	case GIMPLE_ASSIGN:
 	    {
-		t_myproof_variable *op1 = read_operand( gimple_op(g,1), basicblock ); /* op1 */
+		t_myproof_variable *op1 = read_operand( gimple_op(g,1), basicblock, false ); /* op1 */
 		if ( op1 )
 		    {
 			op1->visited++;
+			basicblock->nload++;
 		    }
 
 		if ( gimple_num_ops(g) > 2 ) /* op2 */
 		    {
-			t_myproof_variable *op2 = read_operand( gimple_op(g,2), basicblock );
+			t_myproof_variable *op2 = read_operand( gimple_op(g,2), basicblock, false );
 			if ( op2 )
 			    {
 				op2->visited++;
+				basicblock->nload++;
 			    }
 		    }
 
-		t_myproof_variable *opdef = read_operand( gimple_op(g,0), basicblock ); /* op def */
+		t_myproof_variable *opdef = read_operand( gimple_op(g,0), basicblock, true ); /* op def */
 		if ( opdef )
 		    {
 			opdef->modified++;
+			basicblock->nstore++;
 		    }
 	    }
 	    break;
@@ -157,24 +170,24 @@ static void read_stmt( gimple g, t_myproof_basicblock *basicblock )
 	case GIMPLE_CALL:
 	    for ( i = 0; i < gimple_call_num_args(g); ++i )
 		{
-		    read_operand( gimple_call_arg(g,i), basicblock );
+		    read_operand( gimple_call_arg(g,i), basicblock, false );
 		}
 
 	    if ( gimple_call_lhs(g) != NULL_TREE )
 		{
-		    read_operand( gimple_call_lhs(g), basicblock );
+		    read_operand( gimple_call_lhs(g), basicblock, false );
 		}
 	    break;
 
 	case GIMPLE_COND:
-	    read_operand( gimple_cond_lhs(g), basicblock ); /* op1 */
-	    read_operand( gimple_cond_rhs(g), basicblock ); /* op2 */
+	    read_operand( gimple_cond_lhs(g), basicblock, false ); /* op1 */
+	    read_operand( gimple_cond_rhs(g), basicblock, false ); /* op2 */
 	    break;
 
 	case GIMPLE_RETURN:
 	    if ( gimple_return_retval(g) != NULL_TREE )
 		{
-		    read_operand( gimple_return_retval(g), basicblock );
+		    read_operand( gimple_return_retval(g), basicblock, false );
 		}
 	    break;
 

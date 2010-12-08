@@ -66,6 +66,8 @@ extern "C"
     typedef struct
     {
 	unsigned int index;
+	unsigned int nload;
+	unsigned int nstore;
 	t_mylist *variables;
     } t_myproof_basicblock;
 
