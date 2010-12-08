@@ -3,12 +3,14 @@
 t_myproof *g_myproof_pass; // global to be available from passes
 
 static const t_myproof_pass_def passes[] = {
-    /* { GIMPLE_PASS, "verbose", pass_verbose, "mudflap2", 0, PASS_POS_INSERT_AFTER }, */
-    //{ GIMPLE_PASS, "generic", pass_generic, "mudflap2", 0, PASS_POS_INSERT_AFTER },
-    { GIMPLE_PASS, "function", pass_function, "mudflap2", 0, PASS_POS_INSERT_AFTER },
-    { GIMPLE_PASS, "basicblock", pass_basicblock, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "function", pass_function, "parloops", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "basicblock", pass_basicblock, "parloops", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "loop", pass_loop, "parloops", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "bb", pass_bb, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "variable", pass_variable, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "instrumente", pass_instrumente, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    /* { GIMPLE_PASS, "verbose", pass_verbose, "mudflap2", 0, PASS_POS_INSERT_AFTER }, */
+    { GIMPLE_PASS, "generic", pass_generic, "mudflap2", 0, PASS_POS_INSERT_AFTER },
 };
 
 static struct opt_pass option_passes[sizeof(passes) / sizeof(*passes)];

@@ -2,9 +2,47 @@
 
 static const char *context = "pass variable";
 
-static void read_type( tree t, t_myproof_basicblock *basicblock )
+static int get_type_size( tree t )
 {
-    (void)basicblock;
+    int ret = 0;
+
+    if ( TYPE_SIZE_UNIT(t) != NULL )
+	{
+	    ret = TREE_INT_CST_LOW( TYPE_SIZE_UNIT(t) );
+	}
+
+    return ret;
+}
+
+static int get_size( tree t )
+{
+    enum tree_code tc;
+
+    tc = TREE_CODE( t );
+
+    int size = -1;
+
+    switch ( tc )
+	{
+	case BOOLEAN_TYPE:
+	case INTEGER_TYPE:
+	case REAL_TYPE:
+	    size = get_type_size( t ); break;
+
+	case POINTER_TYPE:
+	    break;
+
+	default:
+	    fprintf( stderr, "myproof: get_size(): %s is not handled\n", tree_code_name[tc] );
+	    gcc_unreachable( );
+	}
+
+    return size;
+}
+
+static void read_type( tree t, t_myproof_function *function )
+{
+    (void)function;
     enum tree_code tc;
 
     tc = TREE_CODE( t );
@@ -32,21 +70,17 @@ static t_mylist_res variable_exists( void *data, void *user_data )
     return ( !strcmp(variable->name, user_data) ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
 }
 
-static t_myproof_variable *create_variable_struct( const char *name )
+static t_myproof_variable *create_variable_struct( const char *name, tree t )
 {
     t_myproof_variable *variable = xmalloc( sizeof(*variable) );
     strcpy( variable->name, name );
-    variable->size = 0;
-    variable->IR = 0;
-    variable->IW = 0;
-    variable->FR = 0;
-    variable->FW = 0;
+    variable->size = get_size( TREE_TYPE(t) );
     variable->visited = 0;
     variable->modified = 0;
     return variable;
 }
 
-static t_myproof_variable *read_data( tree t, t_myproof_basicblock *basicblock )
+static t_myproof_variable *read_data( tree t, t_myproof_function *function )
 {
     char identifier[MYPROOF_NAME_SIZE];
 
@@ -59,22 +93,20 @@ static t_myproof_variable *read_data( tree t, t_myproof_basicblock *basicblock )
 	    sprintf(identifier, "%c_%u", ( TREE_CODE(t) == CONST_DECL ) ? 'C' : 'D', DECL_UID(t) );
 	}
 
-    t_myproof_variable *variable = mylist_find( basicblock->variables, variable_exists, (void*)identifier );
+    t_myproof_variable *variable = mylist_find( function->variables, variable_exists, (void*)identifier );
 
     if ( variable == NULL )
 	{
-	    variable = create_variable_struct( identifier );
-	    mylist_push( &(basicblock->variables), variable );
+	    variable = create_variable_struct( identifier, t );
+	    mylist_insert( &(function->variables), variable );
 	}
 
-    read_type( TREE_TYPE(t), basicblock );
-
-    variable->size++;
+    read_type( TREE_TYPE(t), function );
 
     return variable;
 }
 
-static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicblock, bool store )
+static t_myproof_variable *read_operand( tree t, t_myproof_function *function )
 {
     t_myproof_variable *variable = NULL;
     enum tree_code tc;
@@ -86,21 +118,23 @@ static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicbloc
 	case VAR_DECL:
 	case PARM_DECL:
 	case CONST_DECL:
-	    variable = read_data( t, basicblock );
+	    variable = read_data( t, function );
 	    break;
 
 	case ARRAY_REF:
-	    read_operand( TREE_OPERAND(t,0), basicblock, false ); /* array base */
-	    variable = read_operand( TREE_OPERAND(t,1), basicblock, false ); /* array index */
+	    printf("variable pass array_ref\n");
 
-	    if ( store == true )
-		{
-		    basicblock->nstore++;
-		}
-	    else
-		{
-		    basicblock->nload++;
-		}
+	    read_operand( TREE_OPERAND(t,0), function ); /* array base */
+	    variable = read_operand( TREE_OPERAND(t,1), function ); /* array index */
+
+	    /* if ( store == true ) */
+	    /* 	{ */
+	    /* 	    function->nstore++; */
+	    /* 	} */
+	    /* else */
+	    /* 	{ */
+	    /* 	    function->nload++; */
+	    /* 	} */
 
 	    break;
 
@@ -116,10 +150,11 @@ static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicbloc
 	    break;
 
 	case SSA_NAME:
-	    variable = read_data( SSA_NAME_VAR(t), basicblock );
+	    variable = read_data( SSA_NAME_VAR(t), function );
 	    break;
 
 	case COND_EXPR:
+	case TARGET_MEM_REF:
 	    break;
 
 	default:
@@ -130,7 +165,7 @@ static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicbloc
     return variable;
 }
 
-static void read_stmt( gimple g, t_myproof_basicblock *basicblock )
+static void read_stmt( gimple g, t_myproof_function *function )
 {
     unsigned int i;
     enum gimple_code gc;
@@ -141,28 +176,25 @@ static void read_stmt( gimple g, t_myproof_basicblock *basicblock )
 	{
 	case GIMPLE_ASSIGN:
 	    {
-		t_myproof_variable *op1 = read_operand( gimple_op(g,1), basicblock, false ); /* op1 */
+		t_myproof_variable *op1 = read_operand( gimple_op(g,1), function ); /* op1 */
 		if ( op1 )
 		    {
 			op1->visited++;
-			basicblock->nload++;
 		    }
 
 		if ( gimple_num_ops(g) > 2 ) /* op2 */
 		    {
-			t_myproof_variable *op2 = read_operand( gimple_op(g,2), basicblock, false );
+			t_myproof_variable *op2 = read_operand( gimple_op(g,2), function );
 			if ( op2 )
 			    {
 				op2->visited++;
-				basicblock->nload++;
 			    }
 		    }
 
-		t_myproof_variable *opdef = read_operand( gimple_op(g,0), basicblock, true ); /* op def */
+		t_myproof_variable *opdef = read_operand( gimple_op(g,0), function ); /* op def */
 		if ( opdef )
 		    {
 			opdef->modified++;
-			basicblock->nstore++;
 		    }
 	    }
 	    break;
@@ -170,24 +202,24 @@ static void read_stmt( gimple g, t_myproof_basicblock *basicblock )
 	case GIMPLE_CALL:
 	    for ( i = 0; i < gimple_call_num_args(g); ++i )
 		{
-		    read_operand( gimple_call_arg(g,i), basicblock, false );
+		    read_operand( gimple_call_arg(g,i), function );
 		}
 
 	    if ( gimple_call_lhs(g) != NULL_TREE )
 		{
-		    read_operand( gimple_call_lhs(g), basicblock, false );
+		    read_operand( gimple_call_lhs(g), function );
 		}
 	    break;
 
 	case GIMPLE_COND:
-	    read_operand( gimple_cond_lhs(g), basicblock, false ); /* op1 */
-	    read_operand( gimple_cond_rhs(g), basicblock, false ); /* op2 */
+	    read_operand( gimple_cond_lhs(g), function ); /* op1 */
+	    read_operand( gimple_cond_rhs(g), function ); /* op2 */
 	    break;
 
 	case GIMPLE_RETURN:
 	    if ( gimple_return_retval(g) != NULL_TREE )
 		{
-		    read_operand( gimple_return_retval(g), basicblock, false );
+		    read_operand( gimple_return_retval(g), function );
 		}
 	    break;
 
@@ -215,12 +247,6 @@ static t_mylist_res function_exists( void *data, void *user_data )
     return ( !strcmp(function->name, user_data) ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
 }
 
-static t_mylist_res basicblock_exists( void *data, void *user_data )
-{
-    t_myproof_basicblock* basicblock = data;
-    return ( basicblock->index == (unsigned int)user_data ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
-}
-
 unsigned int pass_variable()
 {
     warning(0, "%<%s%>", context);
@@ -240,17 +266,9 @@ unsigned int pass_variable()
 
     FOR_EACH_BB( bb )
     {
-	t_myproof_basicblock *basicblock = mylist_find( function->basicblocks, basicblock_exists, (void*)bb->index );
-
-	if ( basicblock == NULL )
-	    {
-		fprintf( stderr, "myproof: pass_variable: unhandled \'%u\' basicblock\n", bb->index );
-		return 0;
-	    }
-
 	for ( gsi = gsi_start_bb(bb); !gsi_end_p(gsi); gsi_next(&gsi) )
 	    {
-		read_stmt( gsi_stmt(gsi), basicblock );
+		read_stmt( gsi_stmt(gsi), function );
 	    }
     }
 

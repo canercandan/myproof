@@ -1,8 +1,8 @@
 ~ TODO ~
-- integrer notion basic block dans structure function (C)
-- avoir un compteur de basicblock dans structure function (C)
+- verifier que la partie 1 fonctionne, getion des loops ?
 - finir le script (C)
 - finir le rapport (A-C)
 - generer un CFG (soit de basicblocks soit par fonction) (C)
 - faire la partie 4 (multithreading) (A)
 - offrir une biere a Caner (A)
+- faire le pass_edge

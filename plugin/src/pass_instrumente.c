@@ -35,8 +35,6 @@ static tree create_stop_call()
 
     DECL_ASSEMBLER_NAME( fndecl );
 
-    //tree fargs = tree_cons( NULL_TREE, fs, NULL_TREE );
-
     return build_function_call_expr( UNKNOWN_LOCATION, fndecl, NULL_TREE );
 }
 
@@ -62,9 +60,20 @@ unsigned int pass_instrumente()
     debug_gimple_stmt( start_stmt );
     debug_gimple_stmt( stop_stmt );
 
-    basic_block bb = cfun->cfg->x_entry_block_ptr->next_bb;
-    gimple_stmt_iterator gsi = gsi_start_bb( bb );
+    printf("n_basic_blocks: %d\n", n_basic_blocks);
+    printf("n_edges: %d\n", n_edges);
+
+    basic_block bb;
+    gimple_stmt_iterator gsi;
+
+    bb = ENTRY_BLOCK_PTR->next_bb;
+    gsi = gsi_start_bb( bb );
     gsi_insert_before( &gsi, start_stmt, GSI_SAME_STMT );
+
+    /* for ( ; bb->next != EXIT_BLOCK_PTR; bb = bb->next ); */
+
+    /* bb = last_basic_block; */
+    gsi = gsi_start_bb( bb );
     gsi_insert_before( &gsi, stop_stmt, GSI_SAME_STMT );
 
     return 0;

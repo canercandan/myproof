@@ -1,4 +1,9 @@
-extern int N, M;
+#include <stdlib.h>
+
+#define N 100000
+#define M N
+
+static int tab[N] = {1};
 
 int toto (int *tab)
 {
@@ -20,4 +25,10 @@ int toto (int *tab)
     	    tab[i+2] = 2*sum;
     	    tab[i+3] = 3*sum;
     	}
+}
+
+int main()
+{
+    toto(tab);
+    return 0;
 }

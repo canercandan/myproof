@@ -2,6 +2,16 @@
 
 static const char *context = "pass basicblock";
 
+static t_myproof_basicblock *create_basicblock_struct( const size_t index )
+{
+    t_myproof_basicblock *basicblock = xmalloc( sizeof(*basicblock) );
+    basicblock->index = index;
+    basicblock->nload = 0;
+    basicblock->nstore = 0;
+    basicblock->loop = NULL;
+    return basicblock;
+}
+
 static t_mylist_res function_exists( void *data, void *user_data )
 {
     t_myproof_function* function = data;
@@ -11,17 +21,7 @@ static t_mylist_res function_exists( void *data, void *user_data )
 static t_mylist_res basicblock_exists( void *data, void *user_data )
 {
     t_myproof_basicblock* basicblock = data;
-    return ( basicblock->index == (unsigned int)user_data ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
-}
-
-static t_myproof_basicblock *create_basicblock_struct( const unsigned int index )
-{
-    t_myproof_basicblock *basicblock = xmalloc( sizeof(*basicblock) );
-    basicblock->index = index;
-    basicblock->nload = 0;
-    basicblock->nstore = 0;
-    mylist_init( &(basicblock->variables) );
-    return basicblock;
+    return ( basicblock->index == (size_t)user_data ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
 }
 
 unsigned int pass_basicblock()
@@ -42,12 +42,15 @@ unsigned int pass_basicblock()
 
     FOR_EACH_BB( bb )
     {
-	unsigned int index = bb->index;
+    	size_t index = bb->index;
 
-	if ( mylist_find( function->basicblocks, basicblock_exists, (void*)index ) == NULL )
-	    {
-		mylist_push( &(function->basicblocks), create_basicblock_struct( index ) );
-	    }
+    	t_myproof_basicblock *basicblock = mylist_find( function->basicblocks, basicblock_exists, (void*)index );
+
+    	if ( basicblock == NULL )
+    	    {
+    		basicblock = create_basicblock_struct( index );
+    		mylist_insert( &(function->basicblocks), basicblock );
+    	    }
     }
 
     return 0;

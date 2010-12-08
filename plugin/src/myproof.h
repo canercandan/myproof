@@ -54,29 +54,40 @@ extern "C"
     {
 	char name[MYPROOF_NAME_SIZE];
 	size_t size;
-	size_t IR;
-	size_t IW;
-	size_t FR;
-	size_t FW;
 	size_t visited;
 	size_t modified;
     } t_myproof_variable;
 
+    /* loop structure */
+    typedef struct
+    {
+	size_t niteration;
+    } t_myproof_loop;
+
     /* basicblock structure */
     typedef struct
     {
-	unsigned int index;
-	unsigned int nload;
-	unsigned int nstore;
-	t_mylist *variables;
+	size_t index;
+	size_t nload;
+	size_t nstore;
+	t_myproof_loop *loop;
     } t_myproof_basicblock;
+
+    /* edge structure */
+    typedef struct
+    {
+	t_myproof_basicblock *bb1;
+	t_myproof_basicblock *bb2;
+    } t_myproof_edge;
 
     /* function structure */
     typedef struct
     {
 	char name[MYPROOF_NAME_SIZE];
-	size_t visited;
+	t_mylist *variables;
 	t_mylist *basicblocks;
+	t_mylist *loops;
+	t_mylist *edges;
     } t_myproof_function;
 
     /* function instrumenting structure */
@@ -137,6 +148,9 @@ extern "C"
     unsigned int pass_instrumente();
     unsigned int pass_function();
     unsigned int pass_basicblock();
+    unsigned int pass_loop();
+    unsigned int pass_bb();
+    //unsigned int pass_edge();
     unsigned int pass_variable();
 
     /*

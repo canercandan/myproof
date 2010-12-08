@@ -12,8 +12,10 @@ static t_myproof_function *create_function_struct( const char *name )
 {
     t_myproof_function *function = xmalloc( sizeof(*function) );
     strcpy( function->name, name );
-    function->visited = 0;
+    mylist_init( &(function->variables) );
     mylist_init( &(function->basicblocks) );
+    mylist_init( &(function->loops) );
+    mylist_init( &(function->edges) );
     return function;
 }
 
@@ -25,7 +27,7 @@ unsigned int pass_function()
 
     if ( mylist_find( g_myproof_pass->functions, function_exists, (void*)identifier ) == NULL )
 	{
-	    mylist_push( &(g_myproof_pass->functions), create_function_struct( identifier ) );
+	    mylist_insert( &(g_myproof_pass->functions), create_function_struct( identifier ) );
 	}
 
     return 0;

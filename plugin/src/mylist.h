@@ -38,7 +38,7 @@ extern "C"
 #  define NULL	(void*)0
 # endif /* !NULL */
 
-    #define MALLOC xmalloc
+#define MALLOC xmalloc
 
     /*
     ** type definitions
@@ -72,6 +72,7 @@ extern "C"
     void mylist_init(t_mylist**);
     void mylist_free(t_mylist**);
 
+    void mylist_insert(t_mylist**, void *data);
     void mylist_push(t_mylist**, void *data);
     void *mylist_pop(t_mylist**);
 

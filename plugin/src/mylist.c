@@ -193,3 +193,24 @@ void mylist_push(t_mylist **t, void *data)
     new->next = *t;
     *t = new;
 }
+
+void mylist_insert(t_mylist **t, void *data)
+{
+    t_mylist *new;
+    t_mylist *tmp;
+
+    if ((*t) == NULL)
+	{
+	    mylist_push(t, data);
+	    return;
+	}
+    tmp = *t;
+    while (tmp->next != NULL)
+	{
+	    tmp = tmp->next;
+	}
+    new = (t_mylist*)MALLOC(sizeof(*new));
+    new->data = data;
+    new->next = NULL;
+    tmp->next = new;
+}

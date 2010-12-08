@@ -6,6 +6,7 @@
 
 IF(UNIX)
   ADD_DEFINITIONS(-fplugin=${CMAKE_BINARY_DIR}/lib/libmyproof.so)
+  ADD_DEFINITIONS(-O1)
 ENDIF()
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
@@ -16,6 +17,7 @@ SET(SOURCES
   t-pragma
   t-pragma-error
   t-pragma-funcs
+  t-partie1
   )
 
 FOREACH(current ${SOURCES})
