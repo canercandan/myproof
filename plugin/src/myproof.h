@@ -62,12 +62,19 @@ extern "C"
 	size_t modified;
     } t_myproof_variable;
 
+    /* basicblock structure */
+    typedef struct
+    {
+	unsigned int index;
+	t_mylist *variables;
+    } t_myproof_basicblock;
+
     /* function structure */
     typedef struct
     {
 	char name[MYPROOF_NAME_SIZE];
 	size_t visited;
-	t_mylist *variables;
+	t_mylist *basicblocks;
     } t_myproof_function;
 
     /* function instrumenting structure */
@@ -127,6 +134,7 @@ extern "C"
     unsigned int pass_verbose();
     unsigned int pass_instrumente();
     unsigned int pass_function();
+    unsigned int pass_basicblock();
     unsigned int pass_variable();
 
     /*

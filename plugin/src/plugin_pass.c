@@ -4,9 +4,10 @@ t_myproof *g_myproof_pass; // global to be available from passes
 
 static const t_myproof_pass_def passes[] = {
     /* { GIMPLE_PASS, "verbose", pass_verbose, "mudflap2", 0, PASS_POS_INSERT_AFTER }, */
-    { GIMPLE_PASS, "generic", pass_generic, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    //{ GIMPLE_PASS, "generic", pass_generic, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "function", pass_function, "mudflap2", 0, PASS_POS_INSERT_AFTER },
-    { GIMPLE_PASS, "variable", pass_variable, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    { GIMPLE_PASS, "basicblock", pass_basicblock, "mudflap2", 0, PASS_POS_INSERT_AFTER },
+    //{ GIMPLE_PASS, "variable", pass_variable, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "instrumente", pass_instrumente, "mudflap2", 0, PASS_POS_INSERT_AFTER },
 };
 

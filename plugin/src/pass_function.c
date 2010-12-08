@@ -13,7 +13,7 @@ static t_myproof_function *create_function_struct( const char *name )
     t_myproof_function *function = xmalloc( sizeof(*function) );
     strcpy( function->name, name );
     function->visited = 0;
-    mylist_init( &(function->variables) );
+    mylist_init( &(function->basicblocks) );
     return function;
 }
 

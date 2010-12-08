@@ -2,9 +2,9 @@
 
 static const char *context = "pass variable";
 
-static void read_type( tree t, t_myproof_function *function )
+static void read_type( tree t, t_myproof_basicblock *basicblock )
 {
-    (void)function;
+    (void)basicblock;
     enum tree_code tc;
 
     tc = TREE_CODE( t );
@@ -46,7 +46,7 @@ static t_myproof_variable *create_variable_struct( const char *name )
     return variable;
 }
 
-static t_myproof_variable *read_data( tree t, t_myproof_function *function )
+static t_myproof_variable *read_data( tree t, t_myproof_basicblock *basicblock )
 {
     char identifier[MYPROOF_NAME_SIZE];
 
@@ -59,22 +59,22 @@ static t_myproof_variable *read_data( tree t, t_myproof_function *function )
 	    sprintf(identifier, "%c_%u", ( TREE_CODE(t) == CONST_DECL ) ? 'C' : 'D', DECL_UID(t) );
 	}
 
-    t_myproof_variable *variable = mylist_find( function->variables, variable_exists, (void*)identifier );
+    t_myproof_variable *variable = mylist_find( basicblock->variables, variable_exists, (void*)identifier );
 
     if ( variable == NULL )
 	{
 	    variable = create_variable_struct( identifier );
-	    mylist_push( &(function->variables), variable );
+	    mylist_push( &(basicblock->variables), variable );
 	}
 
-    read_type ( TREE_TYPE(t), function );
+    read_type( TREE_TYPE(t), basicblock );
 
     variable->size++;
 
     return variable;
 }
 
-static t_myproof_variable *read_operand( tree t, t_myproof_function *function )
+static t_myproof_variable *read_operand( tree t, t_myproof_basicblock *basicblock )
 {
     t_myproof_variable *variable = NULL;
     enum tree_code tc;
@@ -86,12 +86,12 @@ static t_myproof_variable *read_operand( tree t, t_myproof_function *function )
 	case VAR_DECL:
 	case PARM_DECL:
 	case CONST_DECL:
-	    variable = read_data( t, function );
+	    variable = read_data( t, basicblock );
 	    break;
 
 	case ARRAY_REF:
-	    read_operand( TREE_OPERAND(t,0), function ); /* array base */
-	    variable = read_operand( TREE_OPERAND(t,1), function ); /* array index */
+	    read_operand( TREE_OPERAND(t,0), basicblock ); /* array base */
+	    variable = read_operand( TREE_OPERAND(t,1), basicblock ); /* array index */
 	    break;
 
 	case ADDR_EXPR:
@@ -106,7 +106,7 @@ static t_myproof_variable *read_operand( tree t, t_myproof_function *function )
 	    break;
 
 	case SSA_NAME:
-	    variable = read_data( SSA_NAME_VAR(t), function );
+	    variable = read_data( SSA_NAME_VAR(t), basicblock );
 	    break;
 
 	case COND_EXPR:
@@ -120,7 +120,7 @@ static t_myproof_variable *read_operand( tree t, t_myproof_function *function )
     return variable;
 }
 
-static void read_stmt( gimple g, t_myproof_function *function )
+static void read_stmt( gimple g, t_myproof_basicblock *basicblock )
 {
     unsigned int i;
     enum gimple_code gc;
@@ -131,7 +131,7 @@ static void read_stmt( gimple g, t_myproof_function *function )
 	{
 	case GIMPLE_ASSIGN:
 	    {
-		t_myproof_variable *op1 = read_operand( gimple_op(g,1), function ); /* op1 */
+		t_myproof_variable *op1 = read_operand( gimple_op(g,1), basicblock ); /* op1 */
 		if ( op1 )
 		    {
 			op1->visited++;
@@ -139,14 +139,14 @@ static void read_stmt( gimple g, t_myproof_function *function )
 
 		if ( gimple_num_ops(g) > 2 ) /* op2 */
 		    {
-			t_myproof_variable *op2 = read_operand( gimple_op(g,2), function );
+			t_myproof_variable *op2 = read_operand( gimple_op(g,2), basicblock );
 			if ( op2 )
 			    {
 				op2->visited++;
 			    }
 		    }
 
-		t_myproof_variable *opdef = read_operand( gimple_op(g,0), function ); /* op def */
+		t_myproof_variable *opdef = read_operand( gimple_op(g,0), basicblock ); /* op def */
 		if ( opdef )
 		    {
 			opdef->modified++;
@@ -157,24 +157,24 @@ static void read_stmt( gimple g, t_myproof_function *function )
 	case GIMPLE_CALL:
 	    for ( i = 0; i < gimple_call_num_args(g); ++i )
 		{
-		    read_operand( gimple_call_arg(g,i), function );
+		    read_operand( gimple_call_arg(g,i), basicblock );
 		}
 
 	    if ( gimple_call_lhs(g) != NULL_TREE )
 		{
-		    read_operand( gimple_call_lhs(g), function );
+		    read_operand( gimple_call_lhs(g), basicblock );
 		}
 	    break;
 
 	case GIMPLE_COND:
-	    read_operand( gimple_cond_lhs(g), function ); /* op1 */
-	    read_operand( gimple_cond_rhs(g), function ); /* op2 */
+	    read_operand( gimple_cond_lhs(g), basicblock ); /* op1 */
+	    read_operand( gimple_cond_rhs(g), basicblock ); /* op2 */
 	    break;
 
 	case GIMPLE_RETURN:
 	    if ( gimple_return_retval(g) != NULL_TREE )
 		{
-		    read_operand( gimple_return_retval(g), function );
+		    read_operand( gimple_return_retval(g), basicblock );
 		}
 	    break;
 
@@ -202,6 +202,12 @@ static t_mylist_res function_exists( void *data, void *user_data )
     return ( !strcmp(function->name, user_data) ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
 }
 
+static t_mylist_res basicblock_exists( void *data, void *user_data )
+{
+    t_myproof_basicblock* basicblock = data;
+    return ( basicblock->index == (unsigned int)user_data ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
+}
+
 unsigned int pass_variable()
 {
     warning(0, "%<%s%>", context);
@@ -221,9 +227,17 @@ unsigned int pass_variable()
 
     FOR_EACH_BB( bb )
     {
+	t_myproof_basicblock *basicblock = mylist_find( function->basicblocks, basicblock_exists, (void*)bb->index );
+
+	if ( basicblock == NULL )
+	    {
+		fprintf( stderr, "myproof: pass_variable: unhandled \'%u\' basicblock\n", bb->index );
+		return 0;
+	    }
+
 	for ( gsi = gsi_start_bb(bb); !gsi_end_p(gsi); gsi_next(&gsi) )
 	    {
-		read_stmt( gsi_stmt(gsi), function );
+		read_stmt( gsi_stmt(gsi), basicblock );
 	    }
     }
 
