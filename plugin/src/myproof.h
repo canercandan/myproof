@@ -98,6 +98,7 @@ extern "C"
     /* main structure */
     typedef struct
     {
+	char dump_file_name[MYPROOF_NAME_SIZE];
 	t_mylist *functions;
 	t_mylist *instrumente_functions;
 	size_t num_all_ops;

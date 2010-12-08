@@ -63,12 +63,10 @@ static t_mylist_res print_part1_functions( void *data, void *user_data )
     return MYLIST_R_CONTINUE;
 }
 
-static void print_part1( t_mylist *functions )
+static void print_part1( t_myproof *myproof )
 {
-    FILE *output = fopen("instrumentation.txt", "w");
-
-    mylist_all_data( functions, print_part1_functions, (void*)output );
-
+    FILE *output = fopen( myproof->dump_file_name, "w" );
+    mylist_all_data( myproof->functions, print_part1_functions, (void*)output );
     fclose( output );
 }
 
@@ -79,5 +77,5 @@ void plugin_summary( void *gcc_data, void *user_data ) //t_myproof*
     printf("** Summary **\n");
     mylist_all( myproof->functions, print_functions );
     mylist_all( myproof->instrumente_functions, print_instrumente_functions );
-    print_part1( myproof->functions );
+    print_part1( myproof );
 }
