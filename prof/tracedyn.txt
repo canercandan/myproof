@@ -1,0 +1,39 @@
+appel fonction 'main' entree cycle 0 sortie cycle 100000
+appel fonction 'titi' entree cycle 1200 sortie cycle 2000
+appel fonction 'tata' entree cycle 1300 sortie cycle 1900
+appel fonction 'tutu' entree cycle 1500 sortie cycle 1700
+appel fonction 'tete' entree cycle 1560 sortie cycle 1600
+appel fonction 'tata' entree cycle 1710 sortie cycle 1800
+appel fonction 'tsts' entree cycle 2100 sortie cycle 3000
+appel fonction 'tata' entree cycle 4000 sortie cycle 4100
+appel fonction 'tata' entree cycle 5000 sortie cycle 5100
+appel fonction 'func1' entree cycle 6000 sortie cycle 15000
+appel fonction 'func2' entree cycle 16000 sortie cycle 90000
+appel fonction 'func3' entree cycle 16500 sortie cycle 18500
+appel fonction 'func4' entree cycle 20000 sortie cycle 23000
+appel fonction 'func5' entree cycle 32000 sortie cycle 32500
+appel fonction 'func6' entree cycle 32600 sortie cycle 32650
+appel fonction 'func7' entree cycle 34000 sortie cycle 34500
+appel fonction 'func8' entree cycle 36000 sortie cycle 37000
+appel fonction 'func9' entree cycle 38000 sortie cycle 41000
+fonction 'toto'
+3 load
+2 * 10 load
+1 * 10 store
+2 load
+3 * 10 load
+3 * 10 store
+fonction 'titi'
+8 load
+2 * 10 load
+1 * 10 store
+2 load
+3 * 10 load
+8 * 10 store
+fonction 'tata'
+3 load
+9 * 10 load
+1 * 10 store
+2 load
+3 * 10 load
+3 * 10 store
