@@ -40,9 +40,15 @@ FLEX_TARGET(MyScanner src/lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.c)
 
 ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
 
-MESSAGE(STATUS ${BISON_MyParser_OUTPUTS})
-MESSAGE(STATUS ${FLEX_MyScanner_OUTPUTS})
-
 ADD_EXECUTABLE(${PROJECT_NAME} src/${PROJECT_NAME}.c ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+
+######################################################################################
+
+
+######################################################################################
+### 5) Where do we go now ?!?
+######################################################################################
+
+ADD_SUBDIRECTORY(application)
 
 ######################################################################################
