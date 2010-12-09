@@ -63,17 +63,12 @@ unsigned int pass_instrumente()
     printf("n_basic_blocks: %d\n", n_basic_blocks);
     printf("n_edges: %d\n", n_edges);
 
-    basic_block bb;
     gimple_stmt_iterator gsi;
 
-    bb = ENTRY_BLOCK_PTR->next_bb;
-    gsi = gsi_start_bb( bb );
+    gsi = gsi_start_bb( ENTRY_BLOCK_PTR->next_bb );
     gsi_insert_before( &gsi, start_stmt, GSI_SAME_STMT );
 
-    /* for ( ; bb->next != EXIT_BLOCK_PTR; bb = bb->next ); */
-
-    /* bb = last_basic_block; */
-    gsi = gsi_start_bb( bb );
+    gsi = gsi_start_bb( EXIT_BLOCK_PTR->prev_bb );
     gsi_insert_before( &gsi, stop_stmt, GSI_SAME_STMT );
 
     return 0;
