@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+rm -rf build
+rm -rf *.toc *.log prv_* *.aux *.prv
