@@ -23,6 +23,8 @@ Pour celà, nous avons développé un parseur lex et yacc qui consomme et reconn
 
 Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.
 
+
+
 Pour celà, nous avons utilisé une représentation sous forme d'arbres n-aires.\\
 La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. Le temps exclusif de la fonction parente est alors calculée en soustrayant son temps inclusif par le temps inclusif de la fonction enfant.\\
@@ -30,14 +32,25 @@ Le noeud précédent le plus récent contenant une mesure d'entrée inférieure 
 \begin{center}
   \begin{dot2tex}[neato,mathmode]
     digraph {
-      "main" -> "func1"
-      [label="main->exclusive time = main->inclusive time - func1->inclusive time"]
+       label="main->exclusive time = main->inclusive time - func1->inclusive time"
+      "main" -> "func1" 
+    }
+  \end{dot2tex}
+  \captionof{figure}{Ajout d'un noeud enfant}
+\end{center}
+
+Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouveau le temps exclusif du parent par le temps inclusif du nouveau noeud ajouté.\\
+
+\begin{center}
+  \begin{dot2tex}[neato,mathmode]
+    digraph {
+   label="main->exclusive time = main->exclusive time - func2->inclusive time"
+   "main" -> "func1" 
+   "main" -> "func2"
     }
   \end{dot2tex}
   \captionof{figure}{Ajout d'un second noeud enfant}
 \end{center}
-
-Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouveau le temps exclusif du parent par le temps inclusif du nouveau noeud ajouté.\\
 
 L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
 
@@ -46,11 +59,10 @@ L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution d
 L'analyseur reparcourt donc les fonctions parsés, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
 
 
-
 Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot \\
 
 
-Une autre fonctionnalité du profiler est de corréler les données statiques et dynamiques d'une fonction, à savoir confronter le temps d'exécution et le nombre de load/store. Dans cette optique, l'outil possède une grammaire lui permettant de reconnaître les données issues de l'instrumentation statique:
+La seconde partie du profiler consiste à corréler les données statiques et dynamiques d'une fonction, à savoir confronter le temps d'exécution et le nombre de load/store. Dans cette optique, nous avons construit une grammaire lui permettant de reconnaître les données issues de l'instrumentation statique:
 
 \begin{verbatim}
 FUNCTION NAME RETLINE
@@ -65,6 +77,8 @@ Une fois les données statiques lues, on peut calculer le nombre de load et de s
 Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot. 
 
 \begin{center}
-  %\includegraphics[scale=0.50]{/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGraph}
-  \captionof{figure}{Functions Call Graph}
+  \begin{dot2tex}[neato,mathmode]
+    digraph { "'main'" -> "'func1'" "'func1'" -> "'func2'" "'func2'" -> "'func3'" "'func3'" -> "'func4'" "'func2'" -> "'func5'" "'main'" -> "'func6'" "'main'" -> "'func7'" "'main'" -> "'func8'" "'main'" -> "'func9'" "'main'" -> "'func10'" "'func10'" -> "'func11'" "'func10'" -> "'func12'" "'func10'" -> "'func13'" "'func10'" -> "'func14'" "'func10'" -> "'func15'" "'func10'" -> "'func16'" "'func10'" -> "'func17'" }
+  \end{dot2tex}
+  \captionof{figure}{Call graph}
 \end{center}
