@@ -1,5 +1,5 @@
 %{
-#include "BuildProfile.h"
+#include "profiler.h"
 %}
 
 %union {

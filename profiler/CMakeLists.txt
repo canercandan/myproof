@@ -1,18 +1,48 @@
+######################################################################################
+### 1) Set the application properties
+######################################################################################
+
+# Checks cmake version compatibility
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+ENABLE_LANGUAGE(C)
+
 PROJECT(profiler)
+
+######################################################################################
+
+
+######################################################################################
+### 2) Include useful features
+######################################################################################
 
 FIND_PACKAGE(BISON)
 FIND_PACKAGE(FLEX)
 
-BISON_TARGET(MyParser parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.c)
-FLEX_TARGET(MyScanner lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.c)
+######################################################################################
+
+
+######################################################################################
+### 3) Include header files path
+######################################################################################
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_BINARY_DIR})
+
+######################################################################################
+
+
+######################################################################################
+### 4) Create executable, link libraries and prepare target
+######################################################################################
+
+BISON_TARGET(MyParser src/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.c)
+FLEX_TARGET(MyScanner src/lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.c)
 
 ADD_FLEX_BISON_DEPENDENCY(MyScanner MyParser)
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 MESSAGE(STATUS ${BISON_MyParser_OUTPUTS})
 MESSAGE(STATUS ${FLEX_MyScanner_OUTPUTS})
 
-ADD_EXECUTABLE(${PROJECT_NAME} ${PROJECT_NAME}.c ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+ADD_EXECUTABLE(${PROJECT_NAME} src/${PROJECT_NAME}.c ${BISON_MyParser_OUTPUTS} ${FLEX_MyScanner_OUTPUTS})
+
+######################################################################################

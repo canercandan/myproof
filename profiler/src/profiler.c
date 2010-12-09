@@ -29,8 +29,8 @@ int addChild(funcNode_t *fNode, funcNode_t **childNode)
     printf("****Begin addChild****\n");
 
     fNode->numChilds++;
-    fNode->funcChilds = (funcNode_t*) realloc(fNode->funcChilds, fNode->numChilds * sizeof(funcNode_t));
-    fNode->funcChilds[fNode->numChilds] = childNode;
+    fNode->funcChilds = (void*) realloc(fNode->funcChilds, fNode->numChilds * sizeof(funcNode_t));
+    fNode->funcChilds[fNode->numChilds] = (void*) childNode;
     //parentNode->funcChilds = childNode;
 
     printf("****End addChild****\n");
@@ -66,7 +66,7 @@ int initListNodes()
 
     sizeListNodes = 1;
     rankList=0;
-    listNodes = (funcNode_t*)malloc(sizeListNodes*sizeof(funcNode_t));
+    listNodes = (void*)malloc(sizeListNodes*sizeof(funcNode_t));
 
     root = malloc(sizeof(funcNode_t));
     strcpy(root->funcName, "root");
@@ -102,7 +102,7 @@ int addListNode(funcNode_t * node)
 	       || ((node->startTime > listNodes[rankList-1]->stopTime) && (node->stopTime > listNodes[rankList-1]->stopTime))) {
 		int i;
 		sizeListNodes++;
-		listNodes = (funcNode_t *)realloc(listNodes, sizeListNodes*sizeof(funcNode_t));
+		listNodes = (void*)realloc(listNodes, sizeListNodes*sizeof(funcNode_t));
 		listNodes[rankList] = node;
 		rankList++;
 	    }
@@ -114,7 +114,7 @@ int addListNode(funcNode_t * node)
 	else {
 	    int i;
 	    sizeListNodes++;
-	    listNodes = (funcNode_t *)realloc(listNodes, sizeListNodes*sizeof(funcNode_t));
+	    listNodes = (void*)realloc(listNodes, sizeListNodes*sizeof(funcNode_t));
 	    listNodes[rankList] = node;
 	    addParent(node,root);
 	    rankList++;
@@ -146,11 +146,11 @@ int checkNodeParent(funcNode_t * node)
 
     funcNode_t **tempParentTab;
     int sizeParents = 0;
-    tempParentTab = (funcNode_t*)malloc(0*sizeof(funcNode_t));
+    tempParentTab = (void*)malloc(0*sizeof(funcNode_t));
 
     if(rankList == 0) {
 	printf("ranklist 0: function name: %s\n", node->funcName);
-	addChild(root, node);
+	addChild(root, (void*)node);
 	addParent(node, root);
     }
 
@@ -162,7 +162,7 @@ int checkNodeParent(funcNode_t * node)
 	    printf("node startTime at rankList %d: %d\n", i, listNodes[i]->startTime);
 	    if((node->startTime > (listNodes[i]->startTime)) && (node->stopTime<(listNodes[i]->stopTime))) {
 		sizeParents++;
-		tempParentTab = (funcNode_t*)realloc(tempParentTab, sizeParents*sizeof(funcNode_t));
+		tempParentTab = (void*)realloc(tempParentTab, sizeParents*sizeof(funcNode_t));
 		tempParentTab[sizeParents-1] = listNodes[i];
 	    }
 	}
@@ -171,7 +171,7 @@ int checkNodeParent(funcNode_t * node)
 	    printf("tempParentTab name: %s\n", tempParentTab[sizeParents-1]->funcName);
 	    //printf("addChild at rankList %d\n", rankList);
 	    //addChild(listNodes[rankList-1], node);
-	    addChild(tempParentTab[sizeParents-1], node);
+	    addChild(tempParentTab[sizeParents-1], (void*)node);
 	    addParent(node, tempParentTab[sizeParents-1]);
 	}
     }
@@ -233,7 +233,7 @@ int createNode(funcNode_t *fNode, char name[], int startTime, int stopTime)
     fNode->stopTime = stopTime;
     fNode->funcChilds = NULL;
 
-    fNode->funcChilds = (funcNode_t *)malloc(0*sizeof(funcNode_t));
+    fNode->funcChilds = (void*)malloc(0*sizeof(funcNode_t));
     fNode->numChilds = 0;
 
     fNode->timeInc = fNode->stopTime-fNode->startTime;
@@ -260,7 +260,7 @@ int createNode(funcNode_t *fNode, char name[], int startTime, int stopTime)
     printf("fNode numChilds: %d\n", fNode->numChilds);
 
     sizeOutFuncNodes++;
-    outFuncNodes = (funcNode_t*)realloc(outFuncNodes, sizeOutFuncNodes*sizeof(funcNode_t));
+    outFuncNodes = (void*)realloc(outFuncNodes, sizeOutFuncNodes*sizeof(funcNode_t));
     // outFuncNodes[sizeOutFuncNodes-1] = (funcNode_t*)malloc(sizeof(funcNode_t));
     outFuncNodes[sizeOutFuncNodes-1] = fNode;
 
@@ -695,7 +695,7 @@ int printCG(funcNode_t *node)
 
     FILE *profCG = fopen(PATHCG, "w");
 
-    fprintf(profCG, bufferPrint);
+    fprintf(profCG, "%s\n", bufferPrint);
     fclose(profCG);
 
     printf("***End printCG()***\n");
