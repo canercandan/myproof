@@ -45,7 +45,13 @@ INCLUDE_DIRECTORIES(
 ######################################################################################
 
 IF(UNIX)
-  INCLUDE_DIRECTORIES(${PLUGIN_DIR}) # will be replaced by `${CMAKE_C_COMPILER} -print-file-name=plugin`
+  EXECUTE_PROCESS(
+    COMMAND ${CMAKE_C_COMPILER} -print-file-name=plugin
+    OUTPUT_VARIABLE PLUGIN_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+  INCLUDE_DIRECTORIES(${PLUGIN_DIR}/include)
 
   # enable warnings
   ADD_DEFINITIONS( -Wall -W ) #-Wextra )

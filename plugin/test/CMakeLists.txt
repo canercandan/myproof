@@ -24,6 +24,13 @@ FOREACH(current ${SOURCES})
   ADD_EXECUTABLE(${current} ${current}.c)
   TARGET_LINK_LIBRARIES(${current} myproof_measure m)
   ADD_TEST(${current} ${current})
+
+  ADD_CUSTOM_COMMAND(
+    TARGET ${current} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_CURRENT_BINARY_DIR}/libmyproof.static
+    ${CMAKE_CURRENT_BINARY_DIR}/${current}.static
+    )
 ENDFOREACH()
 
 ######################################################################################

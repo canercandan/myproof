@@ -34,7 +34,7 @@ SET(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 ######################################################################################
 
 ADD_SUBDIRECTORY(plugin)
-ADD_SUBDIRECTORY(prof)
+ADD_SUBDIRECTORY(profiler)
 ADD_SUBDIRECTORY(report)
 
 ######################################################################################
