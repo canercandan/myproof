@@ -1,0 +1,59 @@
+%\NeedsTexFormat{LaTex2e}[1999/01/01]
+%\ProvidesPackage{my_package}[2010/11/23]
+
+\newif\if@algo          \@algofalse
+\newif\if@uml           \@umlfalse
+\newif\if@french        \@frenchfalse
+\newif\if@url           \@urlfalse
+
+\DeclareOption{algo}{\@algotrue}
+\DeclareOption{uml}{\@umltrue}
+\DeclareOption{french}{\@frenchtrue}
+\DeclareOption{url}{\@urltrue}
+\ProcessOptions
+
+\if@french
+\RequirePackage[francais]{babel}
+\RequirePackage[utf8]{inputenc}
+\fi
+
+\RequirePackage{longtable,geometry}
+
+\if@url
+\ifpdf
+\RequirePackage[pdftex]{hyperref}
+\fi
+\RequirePackage{url}
+\fi
+
+\if@algo
+\if@french
+\RequirePackage[boxed,vlined,linesnumbered,french]{algorithm2e}
+\else
+\RequirePackage[boxed,vlined,linesnumbered]{algorithm2e}
+\fi
+\fi
+
+\if@uml
+\RequirePackage{emp}
+\ifx\pdftexversion\undefined
+\RequirePackage[dvips]{graphicx}
+\else
+\RequirePackage[pdftex]{graphicx}
+\DeclareGraphicsRule{*}{mps}{*}{}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\fi
+\fi
+
+\usepackage{subfig}
+
+% \RequirePackage{pstricks}
+% \RequirePackage{pst-gr3d}
+
+\pagestyle{headings}
+\geometry{dvips,a4paper,margin=1.0in}
+
+\author{Aurèle Mahéo, Caner Candan\\M2 MIHP\\aurele.maheo@gmail.com, caner@candan.fr}
+\date\today
+
+\endinput
