@@ -6,8 +6,8 @@ part0: Pragma (plugin)
 
 part1: Génération statique (plugin)
  - definition du fichier de sortie possible avec comme exemple de commande:
-$ gcc-4.5 -fplugin=lib/libmyproof.so ../test/t-partie1.c -O1 -fplugin-arg-libmyproof-dump-file-name=anotherfile.txt
- - formatage de la sortie respecté et enregistré par defaut dans instrumentation.txt
+$ gcc-4.5 -fplugin=lib/libmyproof.so ../test/t-partie1.c -O1 -fplugin-arg-libmyproof-dump-file-name=anotherfile.static
+ - formatage de la sortie respecté et enregistré par defaut dans libmyproof.static
 
 part2: passe GCC (plugin, plugin/measure)
  - respect du formatage du resultat attendu en inclusif et enregistrement dans un fichier myproof.out

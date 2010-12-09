@@ -22,8 +22,8 @@ SET(SOURCES
 
 FOREACH(current ${SOURCES})
   ADD_EXECUTABLE(${current} ${current}.c)
-  ADD_TEST(${current} ${current})
   TARGET_LINK_LIBRARIES(${current} myproof_measure m)
+  ADD_TEST(${current} ${current})
 ENDFOREACH()
 
 ######################################################################################

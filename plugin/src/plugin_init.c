@@ -3,10 +3,10 @@
 
 int plugin_is_GPL_compatible; // needed by gnu plugin api
 
-static t_myproof *create_myproof_struct()
+static t_myproof *create_myproof_struct( const char *plugin_name )
 {
     t_myproof *myproof = xmalloc( sizeof(*myproof) );
-    strcpy( myproof->dump_file_name, "instrumentation.txt" );
+    sprintf(myproof->dump_file_name, "%s.static", plugin_name);
     mylist_init( &(myproof->functions) );
     mylist_init( &(myproof->instrumente_functions) );
     myproof->num_all_ops = 0;
@@ -45,7 +45,7 @@ int plugin_init( struct plugin_name_args *info,
 {
     if (!plugin_default_version_check(version, &gcc_version)) { return 1; }
 
-    t_myproof *myproof = create_myproof_struct();
+    t_myproof *myproof = create_myproof_struct( info->base_name );
 
     parameters_parsing( info, myproof );
 

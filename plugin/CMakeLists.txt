@@ -23,8 +23,8 @@ SET(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 ### 2) Include useful features
 ######################################################################################
 
-INCLUDE(FindDoxygen)
-INCLUDE(FindPkgConfig)
+# INCLUDE(FindDoxygen)
+# INCLUDE(FindPkgConfig)
 
 ######################################################################################
 
