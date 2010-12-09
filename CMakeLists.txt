@@ -23,8 +23,8 @@ SET(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT
 ### 2) Include useful features
 ######################################################################################
 
-INCLUDE(FindDoxygen)
-INCLUDE(FindPkgConfig)
+# INCLUDE(FindDoxygen)
+# INCLUDE(FindPkgConfig)
 
 ######################################################################################
 
@@ -34,7 +34,7 @@ INCLUDE(FindPkgConfig)
 ######################################################################################
 
 ADD_SUBDIRECTORY(plugin)
-ADD_SUBDIRECTORY(lib)
 ADD_SUBDIRECTORY(prof)
+ADD_SUBDIRECTORY(report)
 
 ######################################################################################
