@@ -67,7 +67,9 @@ myprof_read_type ( tree t )
       break;
     case ARRAY_TYPE:
      break;
-
+    case INDIRECT_REF:
+     printf("case INDIRECT_REF detected\n");
+     break;
     default:
       fprintf ( stderr, "mihp: mihp_read_type(): %s is not handled\n", tree_code_name[tc] );
       gcc_unreachable ( );

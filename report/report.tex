@@ -38,7 +38,6 @@ La fonction read\_stmt() qui est appelée permet de savoir si le statement corre
 Ensuite, nous avons besoin de savoir de quel côté de l'égalité nous sommes. read\_stmt() nous donne également la position de l'opérande (à droite ou à gauche de l'égalité. La fonction read\_operand(), quant à elle, détermine le type rencontré (en l'occurence, celui qui nous intéresse est INDIRECT\_REF).
 Lorsque ce cas est rencontré, on incrémente le compteur de loads si l'opérande est droite de l'égalité, et le compteur de stores si l'opérande se trouve à gauche.
 
-
 myprof\_main() parcourt les blocs de base de la fonction instrumentée, et y lit ses statements. Les éventuelles boucles sont gérées par la fonction myprof\_read\_loop.
 Pour chaque ligne du bloc de base rencontrée, la fonction myprof\_read\_stmt() est appelée. Cette fonction permet 
 
@@ -46,16 +45,24 @@ La fonction my\_prof\_read\_loop() permet de connaître les bornes des boucles r
 
 \section{Construction du profilage}
 
-L'objectif de cette partie est de construire un parseur censé analyser les traces de sortie d'exécution du code test.\\
+L'objectif de cette partie est de construire un parseur censé analyser les traces de sortie d'exécution du code à compiler.\\
 
-Ces traces se présentent sous la forme suivante:
+Les traces issues de l'instrumentation dynamique se présentent sous la forme suivante:
 \begin{verbatim}
 Appel X à la fonction main entrée cycle WW sortie cycle YY
 Appel X à la fonction f1 entrée cycle WW sortie cycle YY
 Appel X à la fonction f2 entrée cycle WW sortie cycle YY
 \end{verbatim}
 
-Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction mère.\\
+Nous avons donc développé un analyseur LEX et YACC permettant d'analyser les traces statiques et dynamiques issues du code instrumenté.
+La grammaire reconnaissant les traces dynamiques est la suivante:
+\begin{verbatim}
+CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
+\end{verbatim}
+
+ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.
+
+Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction parente.\\
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
 Pour celà, nous avons développé un parseur lex et yacc qui consomme et reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.\\
 
@@ -65,13 +72,31 @@ La première fonction analysée constitue la racine de l'arbre (il s'agira du po
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci.\\
 
 L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
-L'analyseur enregistre également les différentes instances d'une même fonction dans une structure à part.\\
 
-Enfin, l'outil propose également une corrélation entre les sorties statique et dynamique en analysant le fichier de traces statique.\\
+L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction. Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
+L'analyseur reparcourt donc les fonctions parsés, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
+Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot 
+
+
+
+Une autre fonctionnalité du profiler est de corréler les données statiques et dynamiques d'une fonction, à savoir confronter le temps d'exécution et le nombre de load/store. Dans cette optique, l'outil possède une grammaire lui permettant de reconnaître les données issues de l'instrumentation statique:
+
+\begin{verbatim}
+FUNCTION NAME RETLINE
+NUMERIC LOAD RETLINE
+NUMERIC MUL NUMERIC LOAD RETLINE
+NUMERIC STORE RETLINE
+NUMERIC MUL NUMERIC STORE RETLINE
+\end{verbatim}
+
+Une fois les données statiques consommées, on peut calculer le nombre de loads et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques précédemment analysées.\\
+
+Enfin, l'outil propose également une corrélation entre les sorties statique et dynamique en analysant le fichier de traces statique. Cette corrélation nous fournit le nombre d'opérations load et store par fonction\\
+
+Enfin, l'outil se propose de générer un graphe d'appel des fonctions, en procédant au parcours de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot. 
 
 \begin{center}
 	\includegraphics[scale=0.50]{/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGraph}
 	\captionof{figure}{Functions Call Graph}
 \end{center}
-
 \end{document}

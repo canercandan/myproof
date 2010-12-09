@@ -2,4 +2,8 @@ Dans la fonction yyerror, insérer exit(0), sinon sortie boucle indéfiniment
 IMPORTANT: Dans le main(), pas de boucle while pour yyparse, la traduction doit stopper dès qu'il détecte une expression incorrecte
 Pour chaque grammaire, insérer return 1;
 
+Relier les nodes à la racine
+Agréger les différentes instances d'une meme fonction. Comparer leurs temps d'exécution
 
+Problèmes caractère spéciaux parasites lors de la gestion d'instances:
+tableau timeExcl et timeIncl de la structure InstFunc réalloués alors qu'ils n'ont pas été alloués
