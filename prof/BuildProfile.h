@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PATHCG "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGrap.dot"
+//#define PATHCG "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGrap.dot"
+#define PATHCG "MyProfCallGrap.dot"
 #define PATHINST "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/profInstsOut.txt"
 #define PATHSTATS "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/profStats.txt"
 

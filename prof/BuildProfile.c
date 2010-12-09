@@ -63,7 +63,8 @@ int initListNodes()
 printf("****Begin initListNodes****\n");
  
  //Initialize output stream
- pFile = fopen("/home/aurele/MIHP/CPA/Projet/myproof/Partie3/output.txt","w");
+/* pFile = fopen("/home/aurele/MIHP/CPA/Projet/myproof/Partie3/output.txt","w");*/
+pFile = fopen("output.txt", "w");
  
  sizeListNodes = 1;
  rankList=0;
