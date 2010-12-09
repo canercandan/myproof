@@ -80,7 +80,6 @@ Pour celà, nous avons utilisé une représentation sous forme d'arbres n-aires.
 La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. Le temps exclusif de la fonction parente est alors calculée en soustrayant son temps inclusif par le temps inclusif de la fonction enfant.\\
 
-<<<<<<< HEAD
 \begin{center}
   \begin{dot2tex}[neato,mathmode]
     digraph {
@@ -90,11 +89,8 @@ Le noeud précédent le plus récent contenant une mesure d'entrée inférieure 
   \end{dot2tex}
   \captionof{figure}{Ajout d'un second noeud enfant}
 \end{center}
-=======
-
 
 Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouveau le temps exclusif du parent par le temps inclusif du nouveau noeud ajouté.\\
->>>>>>> 23432cc492281f9d508f2ed539378834921af626
 
 L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
 
