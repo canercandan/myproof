@@ -74,11 +74,13 @@ Le profilage issu du fichier de trace est inclusif, dans le sens où le temps to
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
 Pour celà, nous avons développé un parseur lex et yacc qui consomme et reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.\\
 
-Pour pouvoir construire le profilage exclusif des fonctions, nous avons besoin de connaître l'imbrication des fonctions entre elles.
-Pour celà, nous avons utilisé une représentation sous forme d'abres n-aires.\\
-La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
-Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci.\\
+Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.
 
+Pour celà, nous avons utilisé une représentation sous forme d'arbres n-aires.\\
+La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
+Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. Le temps exclusif de la fonction parente est alors calculée en soustrayant son temps inclusif par le temps inclusif de la fonction enfant.\\
+
+<<<<<<< HEAD
 \begin{center}
   \begin{dot2tex}[neato,mathmode]
     digraph {
@@ -88,13 +90,21 @@ Le noeud précédent le plus récent contenant une mesure d'entrée inférieure 
   \end{dot2tex}
   \captionof{figure}{Ajout d'un second noeud enfant}
 \end{center}
+=======
+
+
+Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouveau le temps exclusif du parent par le temps inclusif du nouveau noeud ajouté.\\
+>>>>>>> 23432cc492281f9d508f2ed539378834921af626
 
 L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
 
 
 L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction. Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
 L'analyseur reparcourt donc les fonctions parsés, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
-Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot 
+
+
+
+Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot \\
 
 
 Une autre fonctionnalité du profiler est de corréler les données statiques et dynamiques d'une fonction, à savoir confronter le temps d'exécution et le nombre de load/store. Dans cette optique, l'outil possède une grammaire lui permettant de reconnaître les données issues de l'instrumentation statique:
@@ -107,11 +117,9 @@ NUMERIC STORE RETLINE
 NUMERIC MUL NUMERIC STORE RETLINE
 \end{verbatim}
 
-Une fois les données statiques consommées, on peut calculer le nombre de loads et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques précédemment analysées.\\
+Une fois les données statiques lues, on peut calculer le nombre de load et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques précédemment analysées.\\
 
-Enfin, l'outil propose également une corrélation entre les sorties statique et dynamique en analysant le fichier de traces statique. Cette corrélation nous fournit le nombre d'opérations load et store par fonction\\
-
-Enfin, l'outil se propose de générer un graphe d'appel des fonctions, en procédant au parcours de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot. 
+Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot. 
 
 \begin{center}
   %\includegraphics[scale=0.50]{/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGraph}
