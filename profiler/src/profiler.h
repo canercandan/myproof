@@ -5,17 +5,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PATHCG "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGrap.dot"
-#define PATHINST "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/profInstsOut.txt"
-#define PATHSTATS "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/profStats.txt"
+#define PATHCG "MyProfCallGrap.dot"
+#define PATHINST "profInstsOut.txt"
+#define PATHSTATS "profStats.txt"
 
-typedef struct StaticFunc {
+///////////////////////////////////////////////
+// Structure permettant de stocker           //
+// les données issues de l'analyse statique  //
+///////////////////////////////////////////////
+typedef struct StaticFunc
+{
     char funcName[12];
     int nbloads;
     int nbstores;
 } StaticFunc_t;
 
-typedef struct InstFunc {
+//////////////////////////////////////////////////
+// Structure stockant les différentes instances //
+// de fonctions                                 //
+//////////////////////////////////////////////////
+typedef struct InstFunc
+{
     char funcName[12];
     int *tabTimeIncl;
     int *tabTimeExcl;
@@ -24,10 +34,19 @@ typedef struct InstFunc {
     int nbstores;
 } InstFunc_t;
 
-/*
-*Structure permettant de stocker les données relatives à une fonction
-*/
-typedef struct funcNode_s {
+//////////////////////////////////////////////////
+// Noeud de fonction contenant:                 //
+// - les temps start et stop                    //
+// - temps inclusif                             //
+// - temps exclusif                             //
+// - functions enfants                          //
+// - fonction parente                           //
+// - nombre d'enfants                           //
+// - nombre de load                             //
+// - nombre de store                            //
+//////////////////////////////////////////////////
+typedef struct funcNode_s
+{
     char funcName[12];
     int startTime;
     int stopTime;
@@ -38,13 +57,21 @@ typedef struct funcNode_s {
     int numChilds;
     int nloads;
     int nstores;
-}funcNode_t;
+} funcNode_t;
 
-typedef struct ValLoadStore {
+////////////////////////////////////////
+// Valeurs de temps d'exécution       //
+// des load et store                  //
+////////////////////////////////////////
+typedef struct ValLoadStore
+{
     int valLoad;
     int valStore;
-}ValLoadStore_t;
+} ValLoadStore_t;
 
+////////////////////////////////////////
+// Fonction root		      //
+////////////////////////////////////////
 funcNode_t * root;
 
 char* tabFuncName;
