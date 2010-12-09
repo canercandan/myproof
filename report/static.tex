@@ -1,0 +1,26 @@
+\section{Instrumentation statique}
+
+Le but de cette partie est de produire une trace statique des fonctions à instrumenter, à savoir une vision des accès mémoire du code. Ces accès mémoire se traduisent par les instruction load et store effectués. Un load est détectée lorsque le contenu d'un tableau est affectée à une variable, un store quand un tableau récupère la valeur d'une variable.\\
+
+Les passes concernées par cette partie sont les fichiers pass\_loop.c et passe\_bb.c
+La première passe détecte les éventuelles boucles présentes la fonction instrumentée, en la parcourant. Elle stocke dans une structure les blocs de base contenus dans lesdites boucles.
+La détection des boucles est possible grâce à l'aide du code suivant, au sein de la fonction pass\_loop():
+\begin{verbatim} 
+ if ( cfun->x_current_loops != NULL )
+	{
+	    read_loop( cfun->x_current_loops->tree_root, function );
+	}
+\end{verbatim}
+
+La seconde passe (passe\_bb.c), quand à elle, reparcourt les blocs de base de la fonction, et vérifie si le bloc de base considéré a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc. 
+
+Dans les 2 passes, l'instrumentation se déroule de la façon suivante:
+
+La fonction read\_stmt() qui est appelée permet de savoir si le statement correspond à un appel de fonction, un retour, une condition, ou plus simplement une affectation (GIMPLE\_ASSIGN). C'est ce dernier cas qui nous intéresse.
+Ensuite, nous avons besoin de savoir de quel côté de l'égalité nous sommes. read\_stmt() nous donne également la position de l'opérande (à droite ou à gauche de l'égalité. La fonction read\_operand(), quant à elle, détermine le type rencontré (en l'occurence, celui qui nous intéresse est INDIRECT\_REF).
+Lorsque ce cas est rencontré, on incrémente le compteur de loads si l'opérande est droite de l'égalité, et le compteur de stores si l'opérande se trouve à gauche.
+
+myprof\_main() parcourt les blocs de base de la fonction instrumentée, et y lit ses statements. Les éventuelles boucles sont gérées par la fonction myprof\_read\_loop.
+Pour chaque ligne du bloc de base rencontrée, la fonction myprof\_read\_stmt() est appelée. Cette fonction permet 
+
+La fonction my\_prof\_read\_loop() permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.

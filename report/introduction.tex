@@ -1,0 +1,13 @@
+\section{Introduction}
+
+\begin{center}
+  \begin{dot2tex}[neato,mathmode]
+    digraph G {
+      node [shape="circle"];
+      a_1 -> a_2 -> a_3 -> a_4 -> a_1;
+    }
+  \end{dot2tex}
+  \captionof{figure}{Test a dot}
+\end{center}
+
+Pour ce qui concerne les différentes phases d'instrumentation, nous avons choisi de développer un plugin, ce qui permet d'enrichir les fonctionnalités de GCC sans pour autant avoir à le recompiler.
