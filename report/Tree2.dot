@@ -1,0 +1,5 @@
+digraph {
+ "main" -> "func1" 
+ "main" -> "func2"
+ [label="main->exclusive time = main->exclusive time - func2->inclusive time"]
+ }
