@@ -5,12 +5,20 @@
 \newif\if@uml           \@umlfalse
 \newif\if@french        \@frenchfalse
 \newif\if@url           \@urlfalse
+\newif\if@dot           \@dotfalse
 
 \DeclareOption{algo}{\@algotrue}
 \DeclareOption{uml}{\@umltrue}
 \DeclareOption{french}{\@frenchtrue}
 \DeclareOption{url}{\@urltrue}
+\DeclareOption{dot}{\@dottrue}
 \ProcessOptions
+
+\if@dot
+\RequirePackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\RequirePackage{dot2texi}
+\fi
 
 \if@french
 \RequirePackage[francais]{babel}
@@ -49,6 +57,8 @@
 
 % \RequirePackage{pstricks}
 % \RequirePackage{pst-gr3d}
+
+\RequirePackage{caption}
 
 \pagestyle{headings}
 \geometry{dvips,a4paper,margin=1.0in}

@@ -1,7 +1,5 @@
 \documentclass[oneside,11pt]{article}
-\usepackage[algo,french,url]{my_package}
-\usepackage{graphicx}
-\usepackage{caption}
+\usepackage[algo,french,url,dot]{my_package}
 
 \title{Profiler,\\projet de compilation}
 
@@ -13,6 +11,16 @@
 
 \newpage
 \section{Introduction}
+
+\begin{center}
+  \begin{dot2tex}[neato,mathmode]
+    digraph G {
+      node [shape="circle"];
+      a_1 -> a_2 -> a_3 -> a_4 -> a_1;
+    }
+  \end{dot2tex}
+  \captionof{figure}{Test a dot}
+\end{center}
 
 Pour ce qui concerne les différentes phases d'instrumentation, nous avons choisi de développer un plugin, ce qui permet d'enrichir les fonctionnalités de GCC sans pour autant avoir à le recompiler.
 
@@ -72,8 +80,13 @@ La première fonction analysée constitue la racine de l'arbre (il s'agira du po
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci.\\
 
 \begin{center}
-	\includegraphics[scale=0.50]{Tree1}
-	\captionof{figure}{Ajout d'un second noeud enfant}
+  \begin{dot2tex}[neato,mathmode]
+    digraph {
+      "main" -> "func1"
+      [label="main->exclusive time = main->inclusive time - func1->inclusive time"]
+    }
+  \end{dot2tex}
+  \captionof{figure}{Ajout d'un second noeud enfant}
 \end{center}
 
 L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
@@ -101,7 +114,7 @@ Enfin, l'outil propose également une corrélation entre les sorties statique et
 Enfin, l'outil se propose de générer un graphe d'appel des fonctions, en procédant au parcours de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot. 
 
 \begin{center}
-	\includegraphics[scale=0.50]{/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGraph}
-	\captionof{figure}{Functions Call Graph}
+  %\includegraphics[scale=0.50]{/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGraph}
+  \captionof{figure}{Functions Call Graph}
 \end{center}
 \end{document}
