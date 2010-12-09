@@ -4,15 +4,24 @@
 
 //#define PATHCG "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGrap.dot"
 #define PATHCG "MyProfCallGrap.dot"
-#define PATHINST "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/profInstsOut.txt"
-#define PATHSTATS "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/profStats.txt"
+#define PATHINST "profInstsOut.txt"
+#define PATHSTATS "profStats.txt"
 
+///////////////////////////////////////////////
+// Structure permettant de stocker           //
+// les données issues de l'analyse statique  //
+///////////////////////////////////////////////
 typedef struct StaticFunc {
 char funcName[12];
 int nbloads;
 int nbstores;
 } StaticFunc_t;
 
+
+//////////////////////////////////////////////////
+// Structure stockant les différentes instances //
+// de fonctions                                 //
+//////////////////////////////////////////////////
 typedef struct InstFunc {
  char funcName[12];
  int *tabTimeIncl;
@@ -22,9 +31,18 @@ typedef struct InstFunc {
  int nbstores;
 } InstFunc_t;
 
-/*
-*Structure permettant de stocker les données relatives à une fonction
-*/
+
+//////////////////////////////////////////////////
+// Noeud de fonction contenant:                 //
+// - les temps start et stop                    //
+// - temps inclusif                             //
+// - temps exclusif                             //
+// - functions enfants                          //
+// - fonction parente                           //
+// - nombre d'enfants                           //
+// - nombre de load                             //
+// - nombre de store                            //
+//////////////////////////////////////////////////
 typedef struct node {
 char funcName[12];
 int startTime;
@@ -38,11 +56,16 @@ int nloads;
 int nstores;
 }funcNode_t;
 
+////////////////////////////////////////
+// Valeurs de temps d'exécution       //
+// des load et store                  //
+////////////////////////////////////////  
 typedef struct ValLoadStore {
  int valLoad;
  int valStore;
 }ValLoadStore_t;
 
+//Fonction root
 funcNode_t * root;
 
 char* tabFuncName;

@@ -45,14 +45,22 @@ La fonction my\_prof\_read\_loop() permet de connaître les bornes des boucles r
 
 \section{Construction du profilage}
 
-L'objectif de cette partie est de construire un parseur censé analyser les traces de sortie d'exécution du code test.\\
+L'objectif de cette partie est de construire un parseur censé analyser les traces de sortie d'exécution du code à compiler.\\
 
-Ces traces se présentent sous la forme suivante:
+Les traces issues de l'instrumentation dynamique se présentent sous la forme suivante:
 \begin{verbatim}
 Appel X à la fonction main entrée cycle WW sortie cycle YY
 Appel X à la fonction f1 entrée cycle WW sortie cycle YY
 Appel X à la fonction f2 entrée cycle WW sortie cycle YY
 \end{verbatim}
+
+Nous avons donc développé un analyseur LEX et YACC permettant d'analyser les traces statiques et dynamiques issues du code instrumenté.
+La grammaire reconnaissant les traces dynamiques est la suivante:
+\begin{verbatim}
+CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
+\end{verbatim}
+
+ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.
 
 Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction parente.\\
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
