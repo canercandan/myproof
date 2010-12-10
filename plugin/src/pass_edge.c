@@ -22,6 +22,15 @@ static t_mylist_res basicblock_exists( void *data, void *user_data )
     return ( basicblock->index == (size_t)user_data ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
 }
 
+static t_mylist_res edge_exists( void *data, void *user_data )
+{
+    t_myproof_edge* edge = data;
+    void **args = user_data;
+    t_myproof_basicblock *src = args[0];
+    t_myproof_basicblock *dst = args[1];
+    return ( edge->src == src && edge->dst == dst ) ? MYLIST_R_FOUND : MYLIST_R_CONTINUE;
+}
+
 unsigned int pass_edge()
 {
     warning(0, "%<%s%>", context);
@@ -65,7 +74,7 @@ unsigned int pass_edge()
 		if ( e->flags & EDGE_FALLTHRU ) { break; }
 		if ( !e->src || !e->dest ) { continue; }
 
-		if ( e->src->index != index )
+		if ( (size_t)e->src->index != index )
 		    {
 			error("edge src must be equal to bb index");
 		    }
@@ -77,8 +86,14 @@ unsigned int pass_edge()
 			warning(0, "%<%s%> unable to find edge dest from basicblocs", context);
 		    }
 
-		t_myproof_edge *edge = create_edge_struct( basicblock, (e->dest->index == 1) ? NULL : dst );
-		mylist_insert( &(function->edges), edge );
+		void *args[2] = { basicblock, dst };
+		t_myproof_edge *edge = mylist_find( function->edges, edge_exists, (void*)args );
+
+		if ( edge == NULL )
+		    {
+			edge = create_edge_struct( basicblock, (e->dest->index == 1) ? NULL : dst );
+			mylist_insert( &(function->edges), edge );
+		    }
 	    }
     }
 

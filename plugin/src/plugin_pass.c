@@ -7,7 +7,7 @@ static const t_myproof_pass_def passes[] = {
     { GIMPLE_PASS, "basicblock", pass_basicblock, "parloops", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "loop", pass_loop, "parloops", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "bb", pass_bb, "mudflap2", 0, PASS_POS_INSERT_AFTER },
-    /* { GIMPLE_PASS, "edge", pass_edge, "mudflap2", 0, PASS_POS_INSERT_AFTER }, */
+    { GIMPLE_PASS, "edge", pass_edge, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "edge", pass_edge, "parloops", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "variable", pass_variable, "mudflap2", 0, PASS_POS_INSERT_AFTER },
     { GIMPLE_PASS, "instrumente", pass_instrumente, "mudflap2", 0, PASS_POS_INSERT_AFTER },
