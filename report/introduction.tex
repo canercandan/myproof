@@ -6,30 +6,6 @@
 
 Nous présentons, en figure \ref{fig:hierarchy}, les fonctionnalités principales de notre logiciel de profiling. En partant de la racine du projet, nous avons 3 sous-noeuds qui sont respectivement ``gcc plugin'', ``profiler'' et ``report''. ``gcc plugin'' est le repertoire contenant le plugin. Il permet de charger à chaud les fonctionnalités de ``myproof'' durant la phase de compilation de gcc. ``profiler'' contient l'outil de profiling. ``report'' est le repertoire contenant ce jolie rapport. Nous verrons plus en détail, par la suite, les fonctionnalités de ``gcc plugin''.
 
-\begin{figure}[here]
-  \centering
-  \begin{dot2tex}[neato]
-    digraph G
-    {
-      node [fixedsize=true, width=0.4, style="fill=green!20"];
-      "myproof" -> {"gcc plugin" "profiler" "report"};
-      "gcc plugin" -> {"init" "passes" "pragmas" "summary" "error" "end" "measure" "params"};
-      "myproof" [style="fill=orange!80"];
-      "gcc plugin" [style="fill=orange!40"];
-    }
-  \end{dot2tex}
-  \caption{Hierarchy of main features}
-  \label{fig:hierarchy}
-\end{figure}
-
-      % "passes" -> {"function pass" "basicblock pass" "loop pass" "bb pass" "variable pass" "instrumente pass"};
-      % "pragmas" -> {"instrumente pragma"};
-      % "summary" -> {"all data structures std output" "static instrumentation output"};
-      % "error" -> {"checks existing instrumented function"};
-      % "end" -> {"remove all data structures"};
-
-      % "profiler" -> "python script";
-
 \subsection{CMake}
 
 Il est important de noter que compte tenu des nombreuses parties que regroupe ce projet, il nous a semblé plus approrié d'utiliser CMake. Plus exactement il nous permet de lier toutes les parties de notre projet et crée des liens de dépendances entre elles durant les phases de compilation, toute en s'abstrayant des contraires de portabilité liées aux divergences des OS\footnote{Systèmes d'exploitation}.\\

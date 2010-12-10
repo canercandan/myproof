@@ -34,7 +34,7 @@ Le noeud précédent le plus récent contenant une mesure d'entrée inférieure 
   \begin{dot2tex}[neato,mathmode]
     digraph {
        label="main->exclusive time = main->inclusive time - func1->inclusive time"
-      "main" -> "func1" 
+      "main" -> "func1"
       "func1" [style="fill=red!80"]
     }
   \end{dot2tex}
@@ -47,7 +47,7 @@ Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouve
   \begin{dot2tex}[neato,mathmode]
     digraph {
    label="main->exclusive time = main->exclusive time - func2->inclusive time"
-   "main" -> "func1" 
+   "main" -> "func1"
    "main" -> "func2"
    "func2" [style="fill=red!80"]
     }
@@ -59,7 +59,7 @@ L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces, j
 
 \subsection{Gestion des instances}
 
-L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction.\\ 
+L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction.\\
 Jusqu'à maintenant, tous les appels d'une même fonction sont chacun représentés par un noeud unique (on rajoute un noeud à chaque ligne lue par YACC).\\
 
 \begin{center}
@@ -100,15 +100,14 @@ load2*FacteurLoad2 + store2*FacteurStore2 = TempsFonction2
 Système qui a été résolu en utilisant la méthode de Cramer.\\
 
 L'opération a été répétée sur toutes les fonctions (en conservant la même fonction comme première équation), afin de calculer une moyenne sur les load/store.
-Cependant, cette piste a été écartée en raison de la volatilité des latences d'accès mémoire.\\ 
+Cependant, cette piste a été écartée en raison de la volatilité des latences d'accès mémoire.\\
 
 \subsection{Graphe d'appel}
 
-Enfin, le profiler propose la génération d'un graphe d'appel des fonctions, à l'aide d'un parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot.
+Enfin, le profiler propose la génération d'un graphe d'appel des fonctions, à l'aide d'un parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil ``dot''. Un exemple de graphe d'appel est donné en figure \ref{fig:call_graph}.
 
-\begin{center}
-	\includegraphics[scale=0.50]{images/CallGraph}
-	\captionof{figure}{Functions Call Graph}
-\end{center}
-
-
+\begin{figure}[here]
+  \includegraphics[scale=0.50]{images/CallGraph}
+  \caption{Functions Call Graph}
+  \label{fig:call_graph}
+\end{figure}
