@@ -10,6 +10,7 @@ SET(INPUTS
   static.tex
   profiler.tex
   multithreading.tex
+  critique.tex
   )
 
 ADD_LATEX_DOCUMENT(${PROJECT_NAME}.tex INPUTS ${INPUTS} IMAGE_DIRS images DEFAULT_PDF)
