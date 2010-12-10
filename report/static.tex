@@ -46,8 +46,11 @@ La détection des boucles est possible grâce du code suivant, au sein de la fon
 	}
 \end{verbatim}
 
-La fonction read\_loop() permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.
+La fonction \begin{verbatim}read\_loop()\end{verbatim} permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.
 
-La seconde passe (passe\_bb.c), quand à elle, reparcourt les blocs de base de la fonction, et vérifie pour chaque bloc considéré s'il a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
+La seconde passe passe\_bb, quand à elle, reparcourt les blocs de base de la fonction, et vérifie pour chaque bloc considéré s'il a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
+
+Au niveau de l'enregistrement de la passe pass\_loop, nous avons changé le paramètre "mudflap2" dédié au parcours GIMPLE, par "parloops"\\
+Enfin, pour pouvoir prendre en compte les boucles du code à compiler, les options d'optimisation "-O1" ou "-O2" de gcc doivent être utilisées.
 
 

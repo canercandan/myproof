@@ -1,6 +1,8 @@
 \section{Construction du profiling}
 
-L'objectif de cette partie est de construire un analyseur chargé d'analyser les traces de sortie d'exécution du code à compiler.\\
+L'objectif de cette partie était d'analyser et d'interpréter les traces de sortie d'exécution du code à compiler.\\
+
+Nous avons donc développé un parseur LEX et YACC capable d'analyser les traces statiques et dynamiques issues du code instrumenté.\\
 
 Les traces issues de l'instrumentation dynamique se présentent sous la forme suivante:
 \begin{verbatim}
@@ -9,7 +11,6 @@ Appel X à la fonction f1 entrée cycle WW sortie cycle YY
 Appel X à la fonction f2 entrée cycle WW sortie cycle YY
 \end{verbatim}
 
-Nous avons donc développé un analyseur LEX et YACC permettant d'analyser les traces statiques et dynamiques issues du code instrumenté.
 La grammaire reconnaissant les traces dynamiques est la suivante:
 \begin{verbatim}
 CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
@@ -19,10 +20,8 @@ ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution
 
 Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction parente.\\
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
-Pour celà, nous avons développé un parseur lex et yacc qui consomme et reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.\\
 
 Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.\\
-
 
 Pour celà, nous avons utilisé une représentation sous forme d'arbres n-aires.\\
 La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
@@ -33,9 +32,10 @@ Le noeud précédent le plus récent contenant une mesure d'entrée inférieure 
     digraph {
        label="main->exclusive time = main->inclusive time - func1->inclusive time"
       "main" -> "func1" 
+      "func1" [style="fill=red!80"]
     }
   \end{dot2tex}
-  \captionof{figure}{Ajout d'un noeud enfant}
+  \captionof{figure}{Add a first node}
 \end{center}
 
 Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouveau le temps exclusif du parent par le temps inclusif du nouveau noeud ajouté.\\
@@ -46,9 +46,10 @@ Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouve
    label="main->exclusive time = main->exclusive time - func2->inclusive time"
    "main" -> "func1" 
    "main" -> "func2"
+   "func2" [style="fill=red!80"]
     }
   \end{dot2tex}
-  \captionof{figure}{Ajout d'un second noeud enfant}
+  \captionof{figure}{Add a second node}
 \end{center}
 
 L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
@@ -56,7 +57,6 @@ L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
 
 L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction. Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
 L'analyseur reparcourt donc les fonctions parsés, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
-
 
 Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot \\
 
@@ -75,31 +75,32 @@ Une fois les données statiques lues, on peut calculer le nombre de load et de s
 
 Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot.
 
-\begin{figure}[here]
-  \centering
+\begin{center}
   \begin{dot2tex}[neato,mathmode]
     digraph {
     graph [
 rankdir = "LR"
 ];
-    "'main'" -> "'func1'";
-    "'func1'" -> "'func2'";
-    "'func2'" -> "'func3'";
-    "'func3'" -> "'func4'";
-    "'func2'" -> "'func5'";
-    "'main'" -> "'func6'";
-    "'main'" -> "'func7'";
-    "'main'" -> "'func8'";
-    "'main'" -> "'func9'";
-    "'main'" -> "'func10'";
-    "'func10'" -> "'func11'";
-    "'func10'" -> "'func12'";
-    "'func10'" -> "'func13'";
-    "'func10'" -> "'func14'";
-    "'func10'" -> "'func15'";
-    "'func10'" -> "'func16'";
-    "'func10'" -> "'func17'"
+    "main" -> "func1";
+    "func1" -> "func2";
+    "func2" -> "func3";
+    "func3" -> "func4";
+    "func2" -> "func5";
+    "main" -> "func6";
+    "main" -> "func7";
+    "main" -> "func8";
+    "main" -> "func9";
+    "main" -> "func10";
+    "func10" -> "func11";
+    "func10" -> "func12";
+    "func10" -> "func13";
+    "func10" -> "func14";
+    "func10" -> "func15";
+    "func10" -> "func16";
+    "func10" -> "'func17"
      }
-   \end{dot2tex}
-   \caption{Call graph}
-\end{figure}
+  \end{dot2tex}
+  \captionof{figure}{Call graph}
+\end{center}
+
+
