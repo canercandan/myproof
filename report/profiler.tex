@@ -18,7 +18,7 @@ La grammaire reconnaissant les traces dynamiques est la suivante:
 CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
 \end{verbatim}
 
-ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.
+ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.\\
 
 \subsection{Profilage exclusif}
 
@@ -27,7 +27,6 @@ L'analyse du fichier de traces se propose de produire un profilage exclusif, c'e
 
 Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.\\
 
-Pour celà, nous avons utilisé une représentation sous forme d'arbres n-aires.\\
 La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée main() par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. Le temps exclusif de la fonction parente est alors calculée en soustrayant son temps inclusif par le temps inclusif de la fonction enfant.\\
 
@@ -61,7 +60,7 @@ L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces, j
 \subsection{Gestion des instances}
 
 L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction.\\ 
-Jusqu'à maintenant, tous les appels d'une même fonction sont chacune représentés par un noeud unique (on rajoute un noeud à chaque ligne lue).\\
+Jusqu'à maintenant, tous les appels d'une même fonction sont chacun représentés par un noeud unique (on rajoute un noeud à chaque ligne lue par YACC).\\
 
 \begin{center}
 	\includegraphics[scale=0.50]{images/liste1}
@@ -101,7 +100,7 @@ load2*FacteurLoad2 + store2*FacteurStore2 = TempsFonction2
 Système qui a été résolu en utilisant la méthode de Cramer.\\
 
 L'opération a été répétée sur toutes les fonctions (en conservant la même fonction comme première équation), afin de calculer une moyenne sur les load/store.
-Cependant, cette piste a été écartée en raison de la volatilité des mesures d'accès mémoire.\\ 
+Cependant, cette piste a été écartée en raison de la volatilité des latences d'accès mémoire.\\ 
 
 \subsection{Graphe d'appel}
 
