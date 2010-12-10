@@ -1,4 +1,4 @@
-\section{Construction du profilage}
+\section{Construction du profiling}
 
 L'objectif de cette partie est de construire un analyseur chargé d'analyser les traces de sortie d'exécution du code à compiler.\\
 
@@ -21,8 +21,7 @@ Le profilage issu du fichier de trace est inclusif, dans le sens où le temps to
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
 Pour celà, nous avons développé un parseur lex et yacc qui consomme et reconnnaît tout d'abord les expressions d'entrée, à l'aide d'une grammaire définie.\\
 
-Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.
-
+Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.\\
 
 
 Pour celà, nous avons utilisé une représentation sous forme d'arbres n-aires.\\
@@ -72,13 +71,14 @@ NUMERIC STORE RETLINE
 NUMERIC MUL NUMERIC STORE RETLINE
 \end{verbatim}
 
-Une fois les données statiques lues, on peut calculer le nombre de load et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques précédemment analysées.\\
+Une fois les données statiques lues, on peut calculer le nombre de load et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques de la fonction précédemment analysée.\\
 
 Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot.
 
 \begin{figure}[here]
   \centering
   \begin{dot2tex}[neato,mathmode]
+<<<<<<< HEAD
     digraph G {
       graph [mindist=0.5];
       node [fixedsize=true, shape=circle, width=0.4, style="fill=green!20"];
@@ -105,3 +105,31 @@ Enfin, il est possible de générer un graphe d'appel des fonctions, en procéda
   \caption{Call graph}
   \label{fig:callgraph}
 \end{figure}
+=======
+    digraph { 
+    graph [
+rankdir = "LR"
+];
+    "'main'" -> "'func1'";
+    "'func1'" -> "'func2'";
+    "'func2'" -> "'func3'";
+    "'func3'" -> "'func4'";
+    "'func2'" -> "'func5'";
+    "'main'" -> "'func6'";
+    "'main'" -> "'func7'";
+    "'main'" -> "'func8'";
+    "'main'" -> "'func9'";
+    "'main'" -> "'func10'";
+    "'func10'" -> "'func11'";
+    "'func10'" -> "'func12'";
+    "'func10'" -> "'func13'";
+    "'func10'" -> "'func14'";
+    "'func10'" -> "'func15'";
+    "'func10'" -> "'func16'";
+    "'func10'" -> "'func17'"
+     }
+  \end{dot2tex}
+  \captionof{figure}{Call graph}
+\end{center}
+
+>>>>>>> 1e2bb29403d5288f72c68d34b52daad8039ad983
