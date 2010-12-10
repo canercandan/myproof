@@ -62,7 +62,8 @@ La corrélation entre données statiques et dynamiques des fonctions instrument�
 Pour cette dernière étape, nous avons utilisé la méthode de Cramer pour la résolution d'équations à plusieurs inconnues. 
 Cet algorithme est répété pour toute les fonctions instrumentées, afin d'obtenir une moyenne finale pour chaque opération.
 
-
+Partie 3: Construction du profiling
+Remplacer "construire un analyseur charger d'analyser" par "réaliser un parseur chargé de traiter"  
 
 
 
