@@ -18,6 +18,7 @@ static t_mylist_res removeall_functions(void *data)
 {
     t_myproof_function *function = data;
     mylist_all(function->variables, removeall_node);
+    mylist_all(function->edges, removeall_node);
     mylist_all(function->basicblocks, removeall_basicblocks);
     free(data);
     return MYLIST_R_CONTINUE;

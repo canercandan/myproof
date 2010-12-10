@@ -47,7 +47,7 @@ unsigned int pass_instrumente()
 
     if ( mylist_find( g_myproof_pass->instrumente_functions, function_exists, (void*)identifier ) == NULL )
 	{
-	    fprintf( stderr, "%s is not instrumentable\n", identifier );
+	    warning(0, "%<%s%> %s is not instrumentable", context, identifier);
 	    return 0;
 	}
 
@@ -56,12 +56,6 @@ unsigned int pass_instrumente()
 
     gimple start_stmt = gimple_build_call_from_tree( start_call );
     gimple stop_stmt = gimple_build_call_from_tree( stop_call );
-
-    debug_gimple_stmt( start_stmt );
-    debug_gimple_stmt( stop_stmt );
-
-    printf("n_basic_blocks: %d\n", n_basic_blocks);
-    printf("n_edges: %d\n", n_edges);
 
     gimple_stmt_iterator gsi;
 

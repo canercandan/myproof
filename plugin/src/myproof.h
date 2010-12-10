@@ -76,8 +76,8 @@ extern "C"
     /* edge structure */
     typedef struct
     {
-	t_myproof_basicblock *bb1;
-	t_myproof_basicblock *bb2;
+	t_myproof_basicblock *src;
+	t_myproof_basicblock *dst;
     } t_myproof_edge;
 
     /* function structure */
@@ -130,6 +130,16 @@ extern "C"
 	unsigned int pos_op;
     } t_myproof_pass_def;
 
+    /* prototype function for params */
+    typedef void (*t_myproof_param_handler)( t_myproof*, char* );
+
+    /* param definition structure */
+    typedef struct
+    {
+	const char *key;
+	t_myproof_param_handler handler;
+    } t_myproof_param_def;
+
     /*
     ** functions
     */
@@ -140,6 +150,7 @@ extern "C"
     void plugin_error( void *gcc_data, void *user_data );
     void plugin_pragma( void *gcc_data, void *user_data );
     void plugin_pass( struct plugin_name_args*, t_myproof* );
+    void plugin_params( struct plugin_name_args*, t_myproof* );
 
     void pragma_instrumente( cpp_reader* );
 
@@ -150,7 +161,7 @@ extern "C"
     unsigned int pass_basicblock();
     unsigned int pass_loop();
     unsigned int pass_bb();
-    //unsigned int pass_edge();
+    unsigned int pass_edge();
     unsigned int pass_variable();
 
     /*

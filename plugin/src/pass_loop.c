@@ -123,7 +123,7 @@ static void read_loop( struct loop *l, t_myproof_function *function )
 {
     if ( double_int_zero_p(l->nb_iterations_estimate) ) /* double_int type defined in double-int.h */
 	{
-	    fprintf( stderr, "Unknow number of iterations\n" );
+	    warning(0, "%<%s%> Unknow number of iterations", context);
 	}
     else
 	{

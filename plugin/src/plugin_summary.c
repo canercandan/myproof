@@ -21,12 +21,20 @@ static t_mylist_res print_basicblocks( void *data )
     return MYLIST_R_CONTINUE;
 }
 
+static t_mylist_res print_edges( void *data )
+{
+    t_myproof_edge *edge = data;
+    printf("  %% edge { bb_src: %2u, bb_dst: %2u }\n", edge->src->index, ( edge->dst == NULL ) ? 1 : edge->dst->index);
+    return MYLIST_R_CONTINUE;
+}
+
 static t_mylist_res print_functions( void *data )
 {
     t_myproof_function *function = data;
     printf("* function: %s\n", function->name);
     mylist_all( function->variables, print_variables );
     mylist_all( function->basicblocks, print_basicblocks );
+    mylist_all( function->edges, print_edges );
     return MYLIST_R_CONTINUE;
 }
 
@@ -65,10 +73,30 @@ static t_mylist_res print_part1_functions( void *data, void *user_data )
 
 static void print_part1( t_myproof *myproof )
 {
-    FILE *output = fopen( myproof->dump_file_name, "w" );
+    char filename[MYPROOF_NAME_SIZE];
+    sprintf( filename, "%s.static", myproof->dump_file_name );
+    FILE *output = fopen( filename, "w" );
     mylist_all_data( myproof->functions, print_part1_functions, (void*)output );
     fclose( output );
 }
+
+/* static t_mylist_res print_cfg_functions( void *data, void *user_data ) */
+/* { */
+/*     t_myproof_function *function = data; */
+/*     FILE *output = user_data; */
+/*     fprintf(output, "fonction %s\n", function->name); */
+/*     mylist_all_data( function->basicblocks, print_part1_basicblocks, (void*)output); */
+/*     return MYLIST_R_CONTINUE; */
+/* } */
+
+/* static void print_cfg( t_myproof *myproof ) */
+/* { */
+/*     char filename[MYPROOF_NAME_SIZE]; */
+/*     sprintf( filename, "%s.cfg", myproof->dump_file_name ); */
+/*     FILE *output = fopen( filename, "w" ); */
+/*     mylist_all_data( myproof->functions, print_cfg_functions, (void*)output ); */
+/*     fclose( output ); */
+/* } */
 
 void plugin_summary( void *gcc_data, void *user_data ) //t_myproof*
 {
