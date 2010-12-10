@@ -33,7 +33,7 @@ La fonction read\_stmt() qui est appelée permet de savoir si le statement corre
 \end{verbatim}
 
 La première passe (pass\_loop) détecte les éventuelles boucles présentes la fonction instrumentée, en la parcourant. Elle stocke dans une structure les blocs de base contenus dans lesdites boucles.\\
-La détection des boucles est possible grâce à l'aide du code suivant, au sein de la fonction pass\_loop():
+La détection des boucles est possible grâce du code suivant, au sein de la fonction pass\_loop():
 \begin{verbatim} 
  if ( cfun->x_current_loops != NULL )
 	{
@@ -43,6 +43,6 @@ La détection des boucles est possible grâce à l'aide du code suivant, au sein
 
 La fonction read\_loop() permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.
 
-La seconde passe (passe\_bb.c), quand à elle, reparcourt les blocs de base de la fonction, et vérifie si le bloc de base considéré a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
+La seconde passe (passe\_bb.c), quand à elle, reparcourt les blocs de base de la fonction, et vérifie pour chaque bloc considéré s'il a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
 
 
