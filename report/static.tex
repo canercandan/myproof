@@ -89,3 +89,18 @@ Au niveau de l'enregistrement de la passe \verb#pass_loop#, nous avons changé l
 \subsection{Paramètres d'optimisation}
 
 Enfin, pour prendre en compte les boucles du code à compiler, les options d'optimisation ``-O1'' ou ``-O2'' de gcc doivent être utilisées.
+
+\subsection{Graphe CFG}
+
+Nous vous présentions précédement les blocs de base ainsi que les ``chemins'' entre blocs de base que ``myproof'' reconnait.\\
+
+Il nous est donc possible de générer des graphes CFG\footnote{Grammaire non contextuelle}.\\
+
+Nous vous présentons en figure \ref{fig:cfg} un exemple de graphe d'une fonction.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[scale=0.50]{images/t-test.pdf}
+  \caption{Exemple de CFG d'une fonction}
+  \label{fig:cfg}
+\end{figure}
