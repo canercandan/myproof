@@ -54,7 +54,7 @@ La détection des boucles est possible grâce du code suivant, au sein de la fon
 	}
 \end{verbatim}
 
-La fonction \verb#read_loop()# permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.\\
+La fonction read_loop() permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.\\
 
 La seconde passe passe\_bb, quant à elle, reparcourt les blocs de base de la fonction, et vérifie pour chaque bloc considéré s'il a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
 
