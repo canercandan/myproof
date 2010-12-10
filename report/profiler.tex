@@ -74,11 +74,34 @@ NUMERIC MUL NUMERIC STORE RETLINE
 
 Une fois les données statiques lues, on peut calculer le nombre de load et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques précédemment analysées.\\
 
-Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot. 
+Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot.
 
-\begin{center}
+\begin{figure}[here]
+  \centering
   \begin{dot2tex}[neato,mathmode]
-    digraph { "'main'" -> "'func1'" "'func1'" -> "'func2'" "'func2'" -> "'func3'" "'func3'" -> "'func4'" "'func2'" -> "'func5'" "'main'" -> "'func6'" "'main'" -> "'func7'" "'main'" -> "'func8'" "'main'" -> "'func9'" "'main'" -> "'func10'" "'func10'" -> "'func11'" "'func10'" -> "'func12'" "'func10'" -> "'func13'" "'func10'" -> "'func14'" "'func10'" -> "'func15'" "'func10'" -> "'func16'" "'func10'" -> "'func17'" }
+    digraph G {
+      graph [mindist=0.5];
+      node [fixedsize=true, shape=circle, width=0.4, style="fill=green!20"];
+      "main" -> "func1"
+      "func1" -> "func2"
+      "func2" -> "func3"
+      "func3" -> "func4"
+      "func2" -> "func5"
+      "main" -> "func6"
+      "main" -> "func7"
+      "main" -> "func8"
+      "main" -> "func9"
+      "main" -> "func10"
+      "func10" -> "func11"
+      "func10" -> "func12"
+      "func10" -> "func13"
+      "func10" -> "func14"
+      "func10" -> "func15"
+      "func10" -> "func16"
+      "func10" -> "func17"
+      "main" [style="fill=orange!80"];
+    }
   \end{dot2tex}
-  \captionof{figure}{Call graph}
-\end{center}
+  \caption{Call graph}
+  \label{fig:callgraph}
+\end{figure}
