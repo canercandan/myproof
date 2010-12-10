@@ -1,2 +1,33 @@
 \section{Les directives pragma}
 
+\emph{Qui n'a jamais révé de percer le mystère de ``OpenMP'' et de ses directives si joliment faites.}
+
+\subsection{Modularité}
+
+Comme introduit précédement les directives pragma font partie des fonctionnalités modulable. Il est très facile de créer une nouvelle directive dans le projet.
+
+\subsection{Respect du sujet}
+
+Il a été demandé dans le sujet de respecter deux styles de déclaration des pragmas que nous citons en figure \ref{fig:style1} et \ref{fig:style2}.
+
+\begin{figure}[here]
+  \centering
+  \verb#pragma instrumente foo#
+  \caption{Style 1}
+  \label{fig:style1}
+\end{figure}
+
+\begin{figure}[here]
+  \centering
+  \verb#pragma instrumente (fct1, fct2)#
+  \caption{Style 2}
+  \label{fig:style2}
+\end{figure}
+
+\subsection{Fichiers de test}
+
+Un ensemble de fichiers dans les répertoires ``test'' du projet ont été crées afin d'assurer le fonctionnement des fonctionnalités demandées.
+
+\subsection{Gestion d'erreur}
+
+Une gestion d'erreur est egalement garantie au cas où les styles cités précedement ne sont pas respectés. Cela se traduit par un message d'erreur du compilateur.
