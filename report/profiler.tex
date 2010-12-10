@@ -114,6 +114,7 @@ Cependant, cette piste a été écartée en raison de la volatilité des latence
 Enfin, le profiler propose la génération d'un graphe d'appel des fonctions, à l'aide d'un parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil ``dot''. Un exemple de graphe d'appel est donné en figure \ref{fig:call_graph}.
 
 \begin{figure}[here]
+  \centering
   \includegraphics[scale=0.50]{images/CallGraph}
   \caption{Functions Call Graph}
   \label{fig:call_graph}
@@ -129,7 +130,14 @@ Nous avons conçu ce programme en annexe à l'outil de profiling, afin de permet
 
 Il est, par exemple, possible dans un premier temps de lister toutes les fonctions que ``myproof'' à détecter pendant la phase de compilation, puis d'en choisir une afin de cibler les mesures précisement sur cette fonction.\\
 
-D'autres options du progamme permettent d'afficher des graphes sur les instances des fonctions.\\
+D'autres options du progamme permettent d'afficher des graphes sur les instances des fonctions. Un exemple est illustré en figure \ref{fig:instance_plot}.\\
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[scale=0.50]{images/instance_plot}
+  \caption{Exemple de graphe généré}
+  \label{fig:instance_plot}
+\end{figure}
 
 % inserer des exemples ici
 
