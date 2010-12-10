@@ -1,4 +1,5 @@
 digraph {
- "main" -> "func1" 
- [label="main->exclusive time = main->inclusive time - func1->inclusive time"]
+ label="main->exclusive time = main->inclusive time - func1->inclusive time";
+  main -> func1;
+ func1 [style=filled,filledcolor=red]
  }
