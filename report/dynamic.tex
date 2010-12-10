@@ -1,2 +1,31 @@
 \section{Intrumentation dynamique}
 
+Pour parvenir à une instrumentation dynamique il a fallut agir à plusieurs endroit du projet.
+
+\subsection{Directive d'instrumentation}
+
+Dans un premier temps, il était indispensable d'avoir un ``pragma'' prévu pour l'instrumentation dynamique, nous l'appelerons \verb#pragma_instrumente#. Ce premier va enregistrer dans une liste toutes les fonctions à instrumenter en respectant l'unicité des fonctions.
+
+\subsection{Passe d'instrumentation}
+
+Dans un second, une ``passe'' \verb#pass_instrumente# est prévu pour l'instrumentation des fonctions figurant dans la précédente liste. L'instrumentation se produit en determinant les blocs de base d'entré et de sortie des fonctions et en leur affectant un nouvel arbre ``gimple'' effectuant un ``call''. Les ``call'' sont effectués sur les fonctions citées ci-dessous.
+
+\subsection{Gestion d'erreur}
+
+Une troisième étape consiste à détécter l'existance d'une fonction déclarée comme ``à-instrumenter''. L'erreur se traduit par un message d'erreur du compilateur.
+
+\subsection{La librairie ``Measure''}
+
+Nous avons crée une librairie appelé ``measure'' qui contient deux fonctions clés:\\
+
+\begin{itemize}
+
+\item \verb#myproof_measure_start(fname)#, maintient une pile de fonction conservant la mesure d'entrée d'une fonction.\\
+
+\item \verb#myproof_measure_stop()#, supprime la dernière fonction insérée dans la pile et détermine le nombre de cycle écoulé pour son exécution en soustrayant le temps avec une mesure de sortie.
+
+\end{itemize}
+
+\subsection{Mesure avec RDTSC}
+
+Pour les mesures nous utilisons l'instruction assembleur ``RDTSC'' qui nous retourne le numéro du cycle courant.
