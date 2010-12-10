@@ -4,6 +4,8 @@ L'objectif de cette partie était d'analyser et d'interpréter les traces de sor
 
 Nous avons donc développé un parseur LEX et YACC capable d'analyser les traces statiques et dynamiques issues du code instrumenté.\\
 
+\subsection{Parsing LEX et YACC}
+
 Les traces issues de l'instrumentation dynamique se présentent sous la forme suivante:
 \begin{verbatim}
 Appel X à la fonction main entrée cycle WW sortie cycle YY
@@ -17,6 +19,8 @@ CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
 \end{verbatim}
 
 ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.
+
+\subsection{Profilage exclusif}
 
 Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction parente.\\
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
@@ -52,14 +56,29 @@ Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouve
   \captionof{figure}{Add a second node}
 \end{center}
 
-L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces.\\
+L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces, jusqu'à obtenir le temps exclusif de toutes les fonctions.\\
 
+\subsection{Gestion des instances}
 
-L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction. Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
-L'analyseur reparcourt donc les fonctions parsés, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
+L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction.\\ 
+Jusqu'à maintenant, tous les appels d'une même fonction sont chacune représentés par un noeud unique (on rajoute un noeud à chaque ligne lue).\\
+
+\begin{center}
+	\includegraphics[scale=0.50]{images/liste1}
+	\captionof{figure}{Nodes list}
+\end{center}
+
+Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
+Pour établir le nombre d'instances par fonction, l'analyseur reparcourt la liste des, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
+
+\begin{center}
+	\includegraphics[scale=0.50]{images/ListIntances}
+	\captionof{figure}{Nodes list with instances}
+\end{center}
 
 Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot \\
 
+\subsection{Corrélation des instrumentations statique et dynamique}
 
 La seconde partie du profiler consiste à corréler les données statiques et dynamiques d'une fonction, à savoir confronter le temps d'exécution et le nombre de load/store. Dans cette optique, nous avons construit une grammaire lui permettant de reconnaître les données issues de l'instrumentation statique:
 
@@ -73,34 +92,23 @@ NUMERIC MUL NUMERIC STORE RETLINE
 
 Une fois les données statiques lues, on peut calculer le nombre de load et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques de la fonction précédemment analysée.\\
 
-Enfin, il est possible de générer un graphe d'appel des fonctions, en procédant au parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot.
+Une piste envisagée (qui a été implémentée), était de calculer une estimation de la latence d'un load et d'un store. Cette opération revenait à résoudre un système d'équations à deux inconnues (load et store), dont le résultat serait le temps d'exécution de la fonction concernée.\\
+On résout le système en prenant en entrée un couple de fonctions, ce qui se traduit par:
+\begin{verbatim}
+load1*FacteurLoad1 + store1*FacteurStore1 = TempsFonction1
+load2*FacteurLoad2 + store2*FacteurStore2 = TempsFonction2
+\end{verbatim}
+
+L'opération a été répétée sur toutes les fonctions (en conservant la même fonction comme première équation), afin de calculer une moyenne sur les load/store.
+Cependant, cette piste a été écartée en raison de la volatilité des mesures d'accès mémoire.\\ 
+
+\subsection{Graphe d'appel}
+
+Enfin, le profiler propose la génération d'un graphe d'appel des fonctions, à l'aide d'un parcours préfixé de l'arbre n-aire construit. Il produit en sortie un fichier compréhensible par l'outil dot.
 
 \begin{center}
-  \begin{dot2tex}[neato,mathmode]
-    digraph {
-    graph [
-rankdir = "LR"
-];
-    "main" -> "func1";
-    "func1" -> "func2";
-    "func2" -> "func3";
-    "func3" -> "func4";
-    "func2" -> "func5";
-    "main" -> "func6";
-    "main" -> "func7";
-    "main" -> "func8";
-    "main" -> "func9";
-    "main" -> "func10";
-    "func10" -> "func11";
-    "func10" -> "func12";
-    "func10" -> "func13";
-    "func10" -> "func14";
-    "func10" -> "func15";
-    "func10" -> "func16";
-    "func10" -> "'func17"
-     }
-  \end{dot2tex}
-  \captionof{figure}{Call graph}
+	\includegraphics[scale=0.50]{images/CallGraph}
+	\captionof{figure}{Functions Call Graph}
 \end{center}
 
 
