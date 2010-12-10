@@ -69,7 +69,7 @@ Jusqu'à maintenant, tous les appels d'une même fonction sont chacune représen
 \end{center}
 
 Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
-Pour établir le nombre d'instances par fonction, l'analyseur reparcourt la liste des, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
+Pour établir le nombre d'instances par fonction, l'analyseur reparcourt la liste des noeuds, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
 
 \begin{center}
 	\includegraphics[scale=0.50]{images/ListIntances}
@@ -98,6 +98,7 @@ On résout le système en prenant en entrée un couple de fonctions, ce qui se t
 load1*FacteurLoad1 + store1*FacteurStore1 = TempsFonction1
 load2*FacteurLoad2 + store2*FacteurStore2 = TempsFonction2
 \end{verbatim}
+Système qui a été résolu en utilisant la méthode de Cramer.\\
 
 L'opération a été répétée sur toutes les fonctions (en conservant la même fonction comme première équation), afin de calculer une moyenne sur les load/store.
 Cependant, cette piste a été écartée en raison de la volatilité des mesures d'accès mémoire.\\ 
