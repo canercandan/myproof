@@ -45,7 +45,7 @@ Dans les 2 passes, l'instrumentation se déroule de la façon suivante:\\
 	    break;
 \end{verbatim}
 
-La première passe (pass\_loop) détecte les éventuelles boucles présentes dans la fonction instrumentée, en la parcourant. Elle stocke dans une structure les blocs de base contenus dans lesdites boucles.\\
+La première passe \verb#pass_loop# détecte les éventuelles boucles présentes dans la fonction instrumentée, en la parcourant. Elle stocke dans une structure les blocs de base contenus dans lesdites boucles.\\
 La détection des boucles est possible grâce du code suivant, au sein de la fonction \verb#pass_loop()#:
 \begin{verbatim}
  if ( cfun->x_current_loops != NULL )
@@ -56,7 +56,7 @@ La détection des boucles est possible grâce du code suivant, au sein de la fon
 
 La fonction \verb#read_loop()# permet de connaître les bornes des boucles rencontrées dans la fonction, et ainsi de multiplier le nombre des opérations éventuelles load et store par le nombre d'itérations de la boucle. Les blocs de base contenant ces boucles sont écartées du traitement classique des blocs, afin d'éviter des redondances.\\
 
-La seconde passe passe\_bb, quant à elle, reparcourt les blocs de base de la fonction, et vérifie pour chaque bloc considéré s'il a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
+La seconde passe \verb#passe_bb#, quant à elle, reparcourt les blocs de base de la fonction, et vérifie pour chaque bloc considéré s'il a déjà été traité dans la passe précédente. Dans ce cas, elle passe au bloc de base suivant. Dans le cas contraire, elle analyse chaque statement du bloc.\\ 
 
-Au niveau de l'enregistrement de la passe pass\_loop, nous avons changé le paramètre "mudflap2" dédié au parcours GIMPLE, par "parloops".\\
+Au niveau de l'enregistrement de la passe \verb#pass_loop#, nous avons changé le paramètre "mudflap2" dédié au parcours GIMPLE, par "parloops".\\
 Enfin, pour pouvoir prendre en compte les boucles du code à compiler, les options d'optimisation "-O1" ou "-O2" de gcc doivent être utilisées.
