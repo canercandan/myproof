@@ -1,7 +1,9 @@
 \section{Instrumentation statique}
 
-La problématique de cette partie était de dresser un profil statique du code considéré, c'est-à-dire obtenir une trace des accès mémoire à la compilation:
+La problématique de cette partie était de dresser un profil statique du code considéré, c'est-à-dire obtenir une trace des accès mémoire à la compilation. Un exemple est illustré en figure \ref{fig:static_result}.
 
+\begin{figure}[here]
+  \centering
 \begin{verbatim}
  fonction toto
  3 load
@@ -10,7 +12,10 @@ La problématique de cette partie était de dresser un profil statique du code c
  2 load
  3 * M load
  3 * M store
- \end{verbatim}
+\end{verbatim}
+  \caption{Résultat obtenu par l'instrumentation statique}
+  \label{fig:static_result}
+\end{figure}
 
  Ces accès mémoire se traduisent par les instructions load et store exécutées. Nous considérons qu'une instruction load est détectée lorsque le contenu d'un tableau est affectée à une variable, un store lorsqu'un tableau récupère la valeur d'une variable.\\
 
