@@ -7,52 +7,22 @@
 
 \maketitle
 
-\begin{figure}[here]
-  \centering
-  \begin{dot2tex}[neato]
-    digraph G
-    {
-      node [fixedsize=true, width=0.4, style="fill=green!20"];
-      "myproof" -> {"gcc plugin" "profiler" "report"};
-      "gcc plugin" -> {"init" "passes" "pragmas" "summary" "error" "end" "measure" "params"};
-      "myproof" [style="fill=orange!80"];
-      "gcc plugin" [style="fill=orange!40"];
-    }
-  \end{dot2tex}
-  \caption{Hierarchy of main features}
-  \label{fig:hierarchy}
-\end{figure}
-
-      % "passes" -> {"function pass" "basicblock pass" "loop pass" "bb pass" "variable pass" "instrumente pass"};
-      % "pragmas" -> {"instrumente pragma"};
-      % "summary" -> {"all data structures std output" "static instrumentation output"};
-      % "error" -> {"checks existing instrumented function"};
-      % "end" -> {"remove all data structures"};
-
-      % "profiler" -> "python script";
-
+\input{schema}
 \newpage
-
 \tableofcontents
-
 \newpage
-
 \input{introduction}
-
 \newpage
-
+\input{pragma}
+\newpage
 \input{static}
-
 \newpage
-
+\input{dynamic}
+\newpage
 \input{profiler}
-
 \newpage
-
 \input{multithreading}
-
 \newpage
-
 \input{critique}
 
 \end{document}

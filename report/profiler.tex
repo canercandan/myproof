@@ -2,7 +2,7 @@
 
 L'objectif de cette partie était d'analyser et d'interpréter les traces de sortie d'exécution du code à compiler.\\
 
-Nous avons donc développé un parseur LEX et YACC capable d'analyser les traces statiques et dynamiques issues du code instrumenté.\\
+Nous avons donc développé un parseur LEX et YACC capable d'analyser les traces statiques et dynamiques issues du code instrumenté.
 
 \subsection{Parsing LEX et YACC}
 
@@ -18,16 +18,18 @@ La grammaire reconnaissant les traces dynamiques est la suivante:
 CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
 \end{verbatim}
 
-ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.\\
+ENTERCYCLE et EXITCYCLE correspondent aux temps de début et de fin d'exécution d'une fonction.
 
 \subsection{Profilage exclusif}
 
 Le profilage issu du fichier de trace est inclusif, dans le sens où le temps total d'exécution d'une fonction inclut les temps d'exécution des fonctions appelées depuis la fonction parente.\\
+
 L'analyse du fichier de traces se propose de produire un profilage exclusif, c'est-à-dire le temps d'exécution d'une fonction seule.\\
 
 Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.\\
 
 La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée \verb#main()# par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
+
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. Le temps exclusif de la fonction parente est alors calculée en soustrayant son temps inclusif par le temps inclusif de la fonction enfant.\\
 
 \begin{center}
@@ -55,11 +57,11 @@ Si un autre noeud ayant le même parent est ajouté, alors on soustrait à nouve
   \captionof{figure}{Add a second node}
 \end{center}
 
-L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces, jusqu'à obtenir le temps exclusif de toutes les fonctions.\\
+L'opération est répétée jusqu'à la fin de l'analyse du fichier de traces, jusqu'à obtenir le temps exclusif de toutes les fonctions.
 
 \subsection{Gestion des instances}
 
-L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction, et de pouvoir les visualiser.\\ 
+L'un des objectifs du profiling est de pouvoir comparer les temps d'exécution de différentes instances d'une fonction, et de pouvoir les visualiser.\\
 
 Jusqu'à maintenant, tous les appels d'une même fonction sont chacun représentés par un noeud unique (on rajoute un noeud à chaque ligne lue par YACC).\\
 
@@ -68,7 +70,8 @@ Jusqu'à maintenant, tous les appels d'une même fonction sont chacun représent
 	\captionof{figure}{Nodes list}
 \end{center}
 
-Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.
+Nous avons avant tout besoin de détecter les fonctions redondantes du fichier d'entrée, puis les considérer comme des instances différentes d'une même fonction.\\
+
 Pour établir le nombre d'instances par fonction, l'analyseur reparcourt la liste des noeuds, identifie celles ayant le même nom, puis les stocke dans une structure, en renseignant le nombre d'instances.\\
 
 \begin{center}
@@ -76,7 +79,7 @@ Pour établir le nombre d'instances par fonction, l'analyseur reparcourt la list
 	\captionof{figure}{Nodes list with instances}
 \end{center}
 
-Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot \\
+Les données recueillies sont ainsi sérialisées dans un fichier de sortie, puis interprétées en vue de produire un diagramme gnuplot.\\
 
 \subsection{Corrélation des instrumentations statique et dynamique}
 
@@ -93,15 +96,18 @@ NUMERIC MUL NUMERIC STORE RETLINE
 Une fois les données statiques lues, on peut calculer le nombre de load et de store par fonction, puis, en parcourant la liste des fonctions déjà stockées, faire correspondre le nombre de load/store aux données dynamiques de la fonction précédemment analysée.\\
 
 Une piste envisagée (qui a été implémentée), était de calculer une estimation de la latence d'un load et d'un store. Cette opération revenait à résoudre un système d'équations à deux inconnues (load et store), dont le résultat serait le temps d'exécution de la fonction concernée.\\
-On résout le système en prenant en entrée un couple de fonctions, ce qui se traduit par:
+
+On résout le système en prenant en entrée un couple de fonctions, ce qui se traduit par:\\
+
 \begin{verbatim}
 load1*FacteurLoad1 + store1*FacteurStore1 = TempsFonction1
 load2*FacteurLoad2 + store2*FacteurStore2 = TempsFonction2
 \end{verbatim}
-Système qui a été résolu en utilisant la méthode de Cramer.\\
+
+Système qui a été résolu en utilisant la méthode de ``Cramer''\footnote{La règle de Cramer: \url{http://fr.wikipedia.org/wiki/Regle_de_Cramer}}.\\
 
 L'opération a été répétée sur toutes les fonctions (en conservant la même fonction comme première équation), afin de calculer une moyenne sur les load/store.
-Cependant, cette piste a été écartée en raison de la volatilité des latences d'accès mémoire.\\
+Cependant, cette piste a été écartée en raison de la volatilité des latences d'accès mémoire.
 
 \subsection{Graphe d'appel}
 
@@ -112,3 +118,18 @@ Enfin, le profiler propose la génération d'un graphe d'appel des fonctions, à
   \caption{Functions Call Graph}
   \label{fig:call_graph}
 \end{figure}
+
+\subsection{Script python}
+
+Compte tenu des nombreuses données que le projet génére, instrumentation static, instrumentation dynamique, cfg, call graph, il devient donc indispensable de créer un outil de paramètrage regroupant toutes ces fonctionnalités.\\
+
+Cet outil s'appelle ``myproof.py'', il s'agit d'un script développé en python.\\
+
+Nous avons conçu ce programme en annexe à l'outil de profiling, afin de permettre à l'utilisateur le choix quant à la donnée qu'il souhaite consulter.\\
+
+Il est, par exemple, possible dans un premier temps de lister toutes les fonctions que ``myproof'' à détecter pendant la phase de compilation, puis d'en choisir une afin de cibler les mesures précisement sur cette fonction.\\
+
+D'autres options du progamme permettent d'afficher des graphes sur les instances des fonctions.\\
+
+% inserer des exemples ici
+

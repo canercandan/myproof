@@ -6,8 +6,11 @@ SET(LATEX_COMPILER_FLAGS "-interaction=nonstopmode --enable-write18" CACHE STRIN
 INCLUDE(UseLATEX.cmake)
 
 SET(INPUTS
+  schema.tex
   introduction.tex
+  pragma.tex
   static.tex
+  dynamic.tex
   profiler.tex
   multithreading.tex
   critique.tex
