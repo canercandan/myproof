@@ -32,18 +32,36 @@ Nous présentons, en figure \ref{fig:hierarchy}, les fonctionnalités principale
 
 \subsection{CMake}
 
-Il est important de noter que compte tenu des nombreuses parties que regroupe ce projet, il nous a semblé plus approrié d'utiliser CMake. Plus exactement il nous permet de lier toutes les parties de notre projet et crée des liens de dépendances entre elles durant les phases de compilation, toute en s'abstrayant des contraires de portabilité liées aux divergences des OS\footnote{Systèmes d'exploitation}.
+Il est important de noter que compte tenu des nombreuses parties que regroupe ce projet, il nous a semblé plus approrié d'utiliser CMake. Plus exactement il nous permet de lier toutes les parties de notre projet et crée des liens de dépendances entre elles durant les phases de compilation, toute en s'abstrayant des contraires de portabilité liées aux divergences des OS\footnote{Systèmes d'exploitation}.\\
+
+Il est ainsi possible de compiler l'ensemble du projet, voir figure \ref{fig:compile_whole_project} ou juste une petite partie, voir figure \ref{fig:compile_one_part}.
+
+\begin{figure}[here]
+  \centering
+  \verb#cd $MYPROOF; ./build_gcc_linux_release#
+  \caption{Compile the whole of project}
+  \label{fig:compile_whole_project}
+\end{figure}
+
+\begin{figure}[here]
+  \centering
+  \verb#cd $MYPROOF/plugin; ./build_gcc_linux_release#
+  \caption{Compile only one part}
+  \label{fig:compile_one_part}
+\end{figure}
+
+Le résultat de la compilation se trouve selon le script de compilation executé, dans le répertoire ``release'', ``debug'' ou ``build''.
 
 \subsection{Le plugin GCC}
 
 Pour ce qui concerne les différentes phases d'instrumentation, nous avons choisi de développer un plugin, ce qui permet d'enrichir les fonctionnalités de GCC sans pour autant avoir à le recompiler.
 
-\begin{center}
-  \includegraphics[scale=0.50]{images/tree2.pdf}
-  \captionof{figure}{test2}
-\end{center}
+% \begin{center}
+%   \includegraphics[scale=0.50]{images/tree2.pdf}
+%   \captionof{figure}{test2}
+% \end{center}
 
-\begin{center}
-  \includegraphics[scale=0.50]{images/tree.png}
-  \captionof{figure}{test}
-\end{center}
+% \begin{center}
+%   \includegraphics[scale=0.50]{images/tree.png}
+%   \captionof{figure}{test}
+% \end{center}
