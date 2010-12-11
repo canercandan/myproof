@@ -32,7 +32,21 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/src 
 
 
 ######################################################################################
-### 4) Create executable, link libraries and prepare target
+### 4) Set compiler definitions
+######################################################################################
+
+IF(UNIX)
+  # enable warnings
+  ADD_DEFINITIONS( -Wall -W ) #-Wextra )
+  ADD_DEFINITIONS( -O2 )
+  ADD_DEFINITIONS( -fPIC )
+ENDIF()
+
+######################################################################################
+
+
+######################################################################################
+### 5) Create executable, link libraries and prepare target
 ######################################################################################
 
 BISON_TARGET(MyParser src/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.c)

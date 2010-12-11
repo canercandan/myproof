@@ -16,9 +16,12 @@ RESULT_FILE_FORMAT='%s%s_p%d_pS%d_P%d_d%d_dS%d_D%d_r%d_s%d'
 def parser(parser=optparse.OptionParser()):
     # general parameters
     parser.add_option('-v', '--verbose', choices=LEVELS.keys(), default='info', help='set a verbose level')
-    parser.add_option('-f', '--file', help='give an input project filename', default='')
+#    parser.add_option('-f', '--file', help='give an input project filename', default='')
     parser.add_option('-o', '--output', help='give an output filename for logging', default=LOG_DEFAULT_FILENAME)
     # general parameters ends
+
+    parser.add_option('-s', '--staticfile', help='give the static file', default='')
+    parser.add_option('-d', '--dynamicfile', help='give the dynamic file', default='')
 
     parser.add_option('-g', '--graphic', action='store_true', default=False, help='generate graphic')
     parser.add_option('-l', '--functionslist', action='store_true', default=False, help='list all functions')
@@ -117,6 +120,14 @@ def get_data( filename ):
         raise ValueError('got an issue during the reading of file %s' % filename)
 
 def main():
+    if options.staticfile == '' or options.dynamicfile == '':
+        logging.error('you have to define the existing static and dynamic files')
+        return
+
+    os.system( 'cat %s %s | ./profiler' % (options.staticfile, options.dynamicfile) )
+
+    return
+
     functions = get_data(options.file)
 
     if options.functionslist:
@@ -124,7 +135,7 @@ def main():
         if len(fnames) > 0:
             print '** List of functions **'
             for fname in fnames: print '\t', fname
-            sys.exit()
+            return
 
     # stats
 
@@ -133,7 +144,7 @@ def main():
     for function in functions:
         if len(function) < 6:
             log.error('incorrect number of parameters \"%s\"' % function)
-            sys.exit()
+            return
 
         function[1:] = [ int(value) for value in function[1:] ]
 

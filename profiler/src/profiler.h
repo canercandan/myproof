@@ -9,10 +9,10 @@
 #define PATHINST "profInstsOut.txt"
 #define PATHSTATS "profStats.txt"
 
-///////////////////////////////////////////////
-// Structure permettant de stocker           //
-// les données issues de l'analyse statique  //
-///////////////////////////////////////////////
+/*
+ * Structure permettant de stocker
+ * les données issues de l'analyse statique
+ */
 typedef struct StaticFunc
 {
     char funcName[12];
@@ -20,10 +20,9 @@ typedef struct StaticFunc
     int nbstores;
 } StaticFunc_t;
 
-//////////////////////////////////////////////////
-// Structure stockant les différentes instances //
-// de fonctions                                 //
-//////////////////////////////////////////////////
+/*
+ * Structure stockant les différentes instances de fonctions
+ */
 typedef struct InstFunc
 {
     char funcName[12];
@@ -34,17 +33,17 @@ typedef struct InstFunc
     int nbstores;
 } InstFunc_t;
 
-//////////////////////////////////////////////////
-// Noeud de fonction contenant:                 //
-// - les temps start et stop                    //
-// - temps inclusif                             //
-// - temps exclusif                             //
-// - functions enfants                          //
-// - fonction parente                           //
-// - nombre d'enfants                           //
-// - nombre de load                             //
-// - nombre de store                            //
-//////////////////////////////////////////////////
+/*
+ * Noeud de fonction contenant:
+ * - les temps start et stop
+ * - temps inclusif
+ * - temps exclusif
+ * - functions enfants
+ * - fonction parente
+ * - nombre d'enfants
+ * - nombre de load
+ * - nombre de store
+ */
 typedef struct funcNode_s
 {
     char funcName[12];
@@ -59,55 +58,22 @@ typedef struct funcNode_s
     int nstores;
 } funcNode_t;
 
-////////////////////////////////////////
-// Valeurs de temps d'exécution       //
-// des load et store                  //
-////////////////////////////////////////
+/*
+ * Valeurs de temps d'exécution des load et store
+ */
 typedef struct ValLoadStore
 {
     int valLoad;
     int valStore;
 } ValLoadStore_t;
 
-////////////////////////////////////////
-// Fonction root		      //
-////////////////////////////////////////
-funcNode_t * root;
+/*
+ * Fonction root
+ */
+extern funcNode_t *g_root;
 
-char* tabFuncName;
-int tabFuncNameSize;
-
-float averageTimeLoad;
-float averageTimeStore;
-
-int sizeStaticFunc;
-StaticFunc_t **tabStaticFunc;
-
-InstFunc_t **tabInstFunc;
-
-FILE *pFile;
-
-char bufferPrint[200];
-
-//FILE *profCG;
-
-funcNode_t **listNodes;
-funcNode_t **outFuncNodes;
-int sizeListNodes;
-int rankList;
-int sizeOutFuncNodes;
-
-InstFunc_t **instFuncs;
-int sizeInstFuncs;
-
-int addChild(funcNode_t *fNode, funcNode_t **childNode);
-int addParent(funcNode_t *fNode, funcNode_t *fParent);
 int initListNodes();
-int addListNode(funcNode_t * node);
-int checkNodeParent(funcNode_t * node);
-int computeExclTime(funcNode_t * node, funcNode_t * nodeParent);
-int createNode(funcNode_t *fNode, char name[], int startTime, int stopTime);
-int instancePresent(int *indexOutFuncNodes);
+int createNode(char *name, int startTime, int stopTime);
 int manageInstances();
 int checkInstances();
 int addStaticLoad(int nbloads);
@@ -120,8 +86,5 @@ int correlateDynStatic();
 int printFuncStats();
 int computeLoadStore();
 int printCG(funcNode_t *node);
-int parcoursPrefix(funcNode_t *node, int index, char *buffer);
-int openFile(FILE *file, char *path);
-int closeFile(FILE *file);
 
 #endif // !__PROFILER_H__

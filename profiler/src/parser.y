@@ -33,26 +33,6 @@
 
 %%
 
-//expstatic: | expstatic NBLOADS
-//         ;
-//
-//FUNCNAME: FUNCTION NAME RETLINE
-//        ;
-//
-//BODYSTATIC: | BODYSTATIC NBLOADS
-//          | BODYSTATIC NBSTORES
-//          | NBLOADS
-//          | NBSTORES
-//          ;
-
-//NBLOADS: FACTOR LOAD RETLINE
-//       | FACTOR MUL FACTOR LOAD RETLINE
-//       ;
-//
-//NBSTORES: FACTOR STORE RETLINE
-//        | FACTOR MUL FACTOR STORE RETLINE
-//        ;
-
 exp: FUNCTION NAME RETLINE
 {
     printf("static file recognized\n");
@@ -74,11 +54,9 @@ exp: FUNCTION NAME RETLINE
     printf("name of function: %s\n", nameFunc);
     printf("enter cycle time: %d ", $6);
     printf("exit cycle: %d ", $8);
-    funcNode_t *funcNode2;
-    const char *name = "tata";
     int start = $6;
     int stop = $8;
-    createNode(funcNode2, nameFunc, start, stop);
+    createNode(nameFunc, start, stop);
 }
 | CALL FUNCTION NAME ENTERCYCLE NUMERIC EXITCYCLE NUMERIC RETLINE
 {
@@ -91,11 +69,9 @@ exp: FUNCTION NAME RETLINE
     printf("name of function: %s\n", nameFunc);
     printf("enter cycle time: %d ", $5);
     printf("exit cycle: %d ", $7);
-    funcNode_t *funcNode1;
-    const char *name = "toto";
     int start = $5;
     int stop = $7;
-    createNode(funcNode1, nameFunc, start, stop);
+    createNode(nameFunc, start, stop);
 }
 | exp NUMERIC LOAD RETLINE
 {
@@ -127,9 +103,6 @@ exp: FUNCTION NAME RETLINE
 }
 ;
 
-//FUNCNAME: FUNCTION NAME RETLINE
-//        ;
-
 BODYSTATIC: | BODYSTATIC NBLOADS RETLINE
 | BODYSTATIC NBSTORES RETLINE
 | NBLOADS RETLINE
@@ -144,58 +117,16 @@ NBSTORES: NUMERIC STORE
 | NUMERIC MUL NUMERIC STORE
 ;
 
-//OPERAND: ADDRESS
-//       | REG
-//       ;
-
-//MNEMONIC: LOAD
-//        ;
-
 %%
-
-/*
-%%
-STATEMENT: CALL FUNCTION ENTER CYCLE EXIT CYCLE {}
-         ;
-%%
-//statement: CALL FUNCTION STARTTIME STOPTIME { }
-//         ;
-//statement: CALL FUNCTION
-//         ;
-
-//STARTTIME: ENTER CYCLE TIME {starttime = TIME;}
-//         ;
-
-//STOPTIME: EXIT CYCLE TIME {stoptime = TIME;}
-//	;
-*/
-
-
-/*
-int addFunc()
-{
- FuncNode* fNode;
- strcpy(fNode->name, NAME);
- fNode->start_time = starttime;
- fNode->stop_time = stoptime;
- return 0;
-}
-*/
 
 int yyerror(const char *str)
 {
     printf("error detected: ");
     printf("%s\n", str);
+    return 1;
 }
 
-/*
-  int yywrap()
-  {
-  // fonction appelé par defaut a la fin de l'analyse syntaxique
-  printf ("Fin de l'analyse syntaxique \n");
-  return 1;
-  }
-*/
+funcNode_t *g_root;
 
 ///////////////////////////////////////////
 //                                       //
@@ -205,11 +136,8 @@ int yyerror(const char *str)
 
 int main(void)
 {
-    //FuncNode *mainNode;
-
     printf("Début profiling\n");
 
-    //funcNode_t * root;
     initListNodes();
     initStaticFunc();
 
@@ -223,14 +151,10 @@ int main(void)
     computeLoadStore();
     printFuncStats();
     printInstsFuncs();
-    printf("root childs: %d\n", root->numChilds);
 
-    //FILE *profCG;
-    //openFile(profCG, "/home/aurele/MIHP/CPA/Projet/myproof/Partie3/MyProfCallGrap.dot");
-    //printf("prefix\n");
-    //printPrefix(root->funcChilds[1], 1);
-    printCG(root->funcChilds[1]);
-    //closeFile(profCG);
+    printf("root childs: %d\n", g_root->numChilds);
+
+    printCG(g_root->funcChilds[1]);
 
     printf("Fin du profiling\n");
 
