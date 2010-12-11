@@ -16,9 +16,10 @@ RESULT_FILE_FORMAT='%s%s_p%d_pS%d_P%d_d%d_dS%d_D%d_r%d_s%d'
 def parser(parser=optparse.OptionParser()):
     # general parameters
     parser.add_option('-v', '--verbose', choices=LEVELS.keys(), default='info', help='set a verbose level')
-#    parser.add_option('-f', '--file', help='give an input project filename', default='')
     parser.add_option('-o', '--output', help='give an output filename for logging', default=LOG_DEFAULT_FILENAME)
     # general parameters ends
+
+    parser.add_option('-p', '--prefix', help='give the prefix path where binaries are', default='.')
 
     parser.add_option('-s', '--staticfile', help='give the static file', default='')
     parser.add_option('-d', '--dynamicfile', help='give the dynamic file', default='')
@@ -124,7 +125,11 @@ def main():
         logging.error('you have to define the existing static and dynamic files')
         return
 
-    os.system( 'cat %s %s | ./profiler' % (options.staticfile, options.dynamicfile) )
+    cmd = 'cat %s %s | %s/profiler' % (options.staticfile, options.dynamicfile, options.prefix)
+
+    print 'cmd', cmd
+
+    os.system( cmd )
 
     return
 
