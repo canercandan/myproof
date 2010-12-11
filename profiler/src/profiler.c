@@ -286,7 +286,7 @@ int createNode(char name[], int startTime, int stopTime)
     fNode->stopTime = stopTime;
     fNode->funcChilds = NULL;
 
-    fNode->funcChilds = (void*)malloc(0*sizeof(funcNode_t));
+    fNode->funcChilds = (void*)malloc(sizeof(funcNode_t));
     fNode->numChilds = 0;
 
     fNode->timeInc = fNode->stopTime-fNode->startTime;

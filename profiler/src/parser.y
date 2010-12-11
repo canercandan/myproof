@@ -154,7 +154,10 @@ int main(void)
 
     printf("root childs: %d\n", g_root->numChilds);
 
-    printCG(g_root->funcChilds[1]);
+    if (g_root->funcChilds)
+	{
+	    printCG(g_root->funcChilds[1]);
+	}
 
     printf("Fin du profiling\n");
 
