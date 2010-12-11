@@ -28,7 +28,7 @@ L'analyse du fichier de traces se propose de produire un profilage exclusif, c'e
 
 Pour pouvoir construire le profilage exclusif des fonctions, nous avions besoin de connaître les imbrications entre elles, et nous avons opté pour une construction sous forme d'arbres n-aires, où chaque noeud représente une fonction.\\
 
-La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée \verb#main()# par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci créé un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
+La première fonction analysée constitue la racine de l'arbre (il s'agira du point d'entrée \verb#main()# par exemple). Ensuite, pour chaque nouvelle fonction reconnue par l'analyseur, celui-ci crée un noeud qui est comparé aux noeuds précédents, en fonction des temps d'entrée et de sortie de la fonction.\\
 
 Le noeud précédent le plus récent contenant une mesure d'entrée inférieure et une mesure de sortie supérieure au noeud dernièrement créé devient le parent de celui-ci. Le temps exclusif de la fonction parente est alors calculée en soustrayant son temps inclusif par le temps inclusif de la fonction enfant.\\
 
