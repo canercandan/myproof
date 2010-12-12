@@ -29,13 +29,13 @@ static int sizeInstFuncs;
  */
 static int addChild(funcNode_t *fNode, funcNode_t **childNode)
 {
-    printf("****Begin addChild****\n");
+    //printf("****Begin addChild****\n");
 
     fNode->numChilds++;
     fNode->funcChilds = (void*) realloc(fNode->funcChilds, fNode->numChilds * sizeof(funcNode_t));
     fNode->funcChilds[fNode->numChilds] = (void*) childNode;
 
-    printf("****End addChild****\n");
+    //printf("****End addChild****\n");
 
     return 0;
 }
@@ -45,13 +45,13 @@ static int addChild(funcNode_t *fNode, funcNode_t **childNode)
  */
 static int addParent(funcNode_t *fNode, funcNode_t *fParent)
 {
-    printf("****Begin addParent****\n");
+    //printf("****Begin addParent****\n");
 
-    printf("node %s parent: %s\n", fNode->funcName, fParent->funcName);
+    //printf("node %s parent: %s\n", fNode->funcName, fParent->funcName);
 
     fNode->fNodeParent = fParent;
 
-    printf("****End addParent****\n");
+    //printf("****End addParent****\n");
     return 0;
 }
 
@@ -60,8 +60,8 @@ static int addParent(funcNode_t *fNode, funcNode_t *fParent)
  */
 static int addListNode(funcNode_t * node)
 {
-    printf("****Begin addListNode****\n");
-    printf("rankList: %d\n", rankList);
+    //printf("****Begin addListNode****\n");
+    //printf("rankList: %d\n", rankList);
 
     if(node != NULL)
 	{
@@ -92,10 +92,10 @@ static int addListNode(funcNode_t * node)
 		}
 	}
 
-    printf("node startTime at rankList %d: %d\n", rankList, listNodes[rankList-1]->startTime);
-    printf("rankList: %d\n", rankList);
+    //printf("node startTime at rankList %d: %d\n", rankList, listNodes[rankList-1]->startTime);
+    //printf("rankList: %d\n", rankList);
 
-    printf("****End addListNode*****\n");
+    //printf("****End addListNode*****\n");
 
     return 0;
 }
@@ -105,15 +105,15 @@ static int addListNode(funcNode_t * node)
  */
 static int checkNodeParent(funcNode_t *node)
 {
-    printf("****Begin CheckNodeParent****\n");
+    //printf("****Begin CheckNodeParent****\n");
     int i;
 
-    printf("check %s parent\n", node->funcName);
-    printf("ranklist: %d\n", rankList);
+    //printf("check %s parent\n", node->funcName);
+    //printf("ranklist: %d\n", rankList);
 
     if(node == NULL)
 	{
-	    printf("node NULL\n");
+	    //printf("node NULL\n");
 	}
 
     funcNode_t **tempParentTab;
@@ -123,18 +123,18 @@ static int checkNodeParent(funcNode_t *node)
 
     if(rankList == 0)
 	{
-	    printf("ranklist 0: function name: %s\n", node->funcName);
+	    //printf("ranklist 0: function name: %s\n", node->funcName);
 	    addChild(g_root, (void*)node);
 	    addParent(node, g_root);
 	}
 
     if(rankList > 0)
 	{
-	    printf("rankList: %d\n", rankList);
+	    //printf("rankList: %d\n", rankList);
 
 	    for(i = 0; i < rankList; i++)
 		{
-		    printf("node startTime at rankList %d: %d\n", i, listNodes[i]->startTime);
+		    //printf("node startTime at rankList %d: %d\n", i, listNodes[i]->startTime);
 		    //Vérification de l'imbrication de la fonction
 		    if ( node->startTime > listNodes[i]->startTime && node->stopTime < listNodes[i]->stopTime )
 			{
@@ -146,14 +146,14 @@ static int checkNodeParent(funcNode_t *node)
 
 	    if (sizeParents > 0)
 		{
-		    printf("sizeParents: %d\n", sizeParents);
-		    printf("tempParentTab name: %s\n", tempParentTab[sizeParents-1]->funcName);
+		    //printf("sizeParents: %d\n", sizeParents);
+		    //printf("tempParentTab name: %s\n", tempParentTab[sizeParents-1]->funcName);
 		    addChild(tempParentTab[sizeParents-1], (void*)node);
 		    addParent(node, tempParentTab[sizeParents-1]);
 		}
 	}
 
-    printf("****End CheckNodeParent****\n");
+    //printf("****End CheckNodeParent****\n");
 
     return 0;
 }
@@ -163,7 +163,7 @@ static int checkNodeParent(funcNode_t *node)
  */
 static int computeExclTime(funcNode_t * node, funcNode_t * nodeParent)
 {
-    printf("****Begin computeExclTime****\n");
+    //printf("****Begin computeExclTime****\n");
 
     // On soustrait le temps inclusif du node parent par celui des nodes enfants
     // pour obtenir le temps exclusif
@@ -171,7 +171,7 @@ static int computeExclTime(funcNode_t * node, funcNode_t * nodeParent)
 
     fprintf(pFile,"nodeParent %s exclusive time: %d\n",nodeParent->funcName, nodeParent->timeExcl);
 
-    printf("****End computeExclTime****\n");
+    //printf("****End computeExclTime****\n");
 
     return 1;
 }
@@ -181,15 +181,15 @@ static int computeExclTime(funcNode_t * node, funcNode_t * nodeParent)
  */
 static int parcoursPrefix(funcNode_t *node, int index, char *bufferPrint)
 {
-    printf("***Begin parcoursPrefix()***\n");
+    //printf("***Begin parcoursPrefix()***\n");
     int i;
-    printf("index: %d\n", index);
+    //printf("index: %d\n", index);
 
     funcNode_t *tempParent = node->fNodeParent;
 
-    printf("function name: %s\n", node->funcName);
-    printf("function parent: %s\n", tempParent->funcName);
-    printf("function nb childs: %d\n", node->numChilds);
+    //printf("function name: %s\n", node->funcName);
+    //printf("function parent: %s\n", tempParent->funcName);
+    //printf("function nb childs: %d\n", node->numChilds);
 
     if(node->numChilds > 0)
 	{
@@ -198,8 +198,8 @@ static int parcoursPrefix(funcNode_t *node, int index, char *bufferPrint)
 		    funcNode_t *tempChild = (funcNode_t*)malloc(sizeof(funcNode_t));
 		    tempChild = node->funcChilds[i];
 
-		    printf("%s -> %s\n", node->funcName, tempChild->funcName);
-		    printf("Concatenation\n");
+		    //printf("%s -> %s\n", node->funcName, tempChild->funcName);
+		    //printf("Concatenation\n");
 		    strcat(bufferPrint, "\"");
 		    strcat(bufferPrint, node->funcName);
 		    strcat(bufferPrint, "\"");
@@ -221,9 +221,9 @@ static int parcoursPrefix(funcNode_t *node, int index, char *bufferPrint)
 	    return 1;
 	}
 
-    printf("bufferPrint: %s\n", bufferPrint);
+    //printf("bufferPrint: %s\n", bufferPrint);
 
-    printf("***End parcoursPrefix()***\n");
+    //printf("***End parcoursPrefix()***\n");
 
     return 0;
 }
@@ -233,7 +233,7 @@ static int parcoursPrefix(funcNode_t *node, int index, char *bufferPrint)
  */
 int initListNodes()
 {
-    printf("****Begin initListNodes****\n");
+    //printf("****Begin initListNodes****\n");
 
     //Initialize output stream
     pFile = fopen("output.txt","w");
@@ -244,7 +244,7 @@ int initListNodes()
 
     g_root = malloc(sizeof(funcNode_t));
     strcpy(g_root->funcName, "root");
-    printf("strcpy ok\n");
+    //printf("strcpy ok\n");
     listNodes[rankList] = g_root;
 
     //Init tabFuncName
@@ -257,7 +257,7 @@ int initListNodes()
     tabInstFunc = (InstFunc_t **)malloc(sizeInstFuncs*sizeof(InstFunc_t));
     outFuncNodes = (funcNode_t **)malloc(sizeOutFuncNodes*sizeof(funcNode_t));
 
-    printf("****End initListNodes****\n");
+    //printf("****End initListNodes****\n");
 
     return 0;
 }
@@ -269,19 +269,19 @@ int createNode(char name[], int startTime, int stopTime)
 {
     funcNode_t *fNode;
 
-    printf("****begin createNode****\n");
+    //printf("****begin createNode****\n");
 
     if (startTime > stopTime)
 	{
-	    printf("startTime > stopTime! \n");
+	    //printf("startTime > stopTime! \n");
 	    return -1;
 	}
 
-    printf("name : %s\n", name);
+    //printf("name : %s\n", name);
 
     fNode = malloc(sizeof(funcNode_t));
     strcpy(fNode->funcName, name);
-    printf("strcpy ok\n");
+    //printf("strcpy ok\n");
     fNode->startTime = startTime;
     fNode->stopTime = stopTime;
     fNode->funcChilds = NULL;
@@ -291,7 +291,7 @@ int createNode(char name[], int startTime, int stopTime)
 
     fNode->timeInc = fNode->stopTime-fNode->startTime;
     fNode->timeExcl = fNode->timeInc;
-    printf("fNode name: %s\n", fNode->funcName);
+    //printf("fNode name: %s\n", fNode->funcName);
 
     fprintf(pFile,"function %s inclusive time: %d\n",fNode->funcName, fNode->timeInc);
 
@@ -306,20 +306,20 @@ int createNode(char name[], int startTime, int stopTime)
 
     funcNode_t *fTempNodeParent = fNode->fNodeParent;
 
-    printf("fNode %s parent: %s\n", fNode->funcName, fTempNodeParent->funcName);
+    //printf("fNode %s parent: %s\n", fNode->funcName, fTempNodeParent->funcName);
 
     if (fNode->fNodeParent != NULL)
 	{
 	    computeExclTime(fNode, fNode->fNodeParent);
 	}
 
-    printf("fNode numChilds: %d\n", fNode->numChilds);
+    //printf("fNode numChilds: %d\n", fNode->numChilds);
 
     sizeOutFuncNodes++;
     outFuncNodes = (void*)realloc(outFuncNodes, sizeOutFuncNodes*sizeof(funcNode_t));
     outFuncNodes[sizeOutFuncNodes-1] = fNode;
 
-    printf("****end createNode****\n");
+    //printf("****end createNode****\n");
 
     return 0;
 }
@@ -330,18 +330,18 @@ int createNode(char name[], int startTime, int stopTime)
 int manageInstances()
 {
     //Manage instances
-    printf("\n***Begin Instances management***\n");
+    //printf("\n***Begin Instances management***\n");
 
     int i, k;
 
     for (i = 0; i < sizeOutFuncNodes; i++)
 	{
-	    printf("\n");
-	    printf("-----------------------\n");
-	    printf("outFuncNodes %d name: %s\n",i, outFuncNodes[i]->funcName);
-	    printf("outFuncNodes %d length name: %d\n", i, strlen(outFuncNodes[i]->funcName));
-	    printf("outFuncNodes %d inclusive time: %d\n", i, outFuncNodes[i]->timeInc);
-	    printf("outFuncNodes %d exclusive time: %d\n", i, outFuncNodes[i]->timeExcl);
+	    //printf("\n");
+	    //printf("-----------------------\n");
+	    //printf("outFuncNodes %d name: %s\n",i, outFuncNodes[i]->funcName);
+	    //printf("outFuncNodes %d length name: %d\n", i, strlen(outFuncNodes[i]->funcName));
+	    //printf("outFuncNodes %d inclusive time: %d\n", i, outFuncNodes[i]->timeInc);
+	    //printf("outFuncNodes %d exclusive time: %d\n", i, outFuncNodes[i]->timeExcl);
 
 	    //Test d'instance présente
 	    int ret = 0;
@@ -352,15 +352,15 @@ int manageInstances()
 
 		    if (strncmp(outFuncNodes[i]->funcName, tabInstFunc[k]->funcName, 6) == 0)
 			{
-			    printf("Add an instance of function\n");
-			    printf("function name: %s\n", tabInstFunc[k]->funcName);
+			    //printf("Add an instance of function\n");
+			    //printf("function name: %s\n", tabInstFunc[k]->funcName);
 			    tabInstFunc[k]->nbInsts++;
-			    printf("nb Instances: %d\n", tabInstFunc[k]->nbInsts);
+			    //printf("nb Instances: %d\n", tabInstFunc[k]->nbInsts);
 			    tabInstFunc[k]->tabTimeExcl = (int *)realloc(tabInstFunc[k]->tabTimeExcl, (tabInstFunc[k]->nbInsts)*sizeof(int));
 			    tabInstFunc[k]->tabTimeIncl = (int *)realloc(tabInstFunc[k]->tabTimeIncl, (tabInstFunc[k]->nbInsts)*sizeof(int));
 
-			    printf("function node exclusive time: %d\n", outFuncNodes[i]->timeExcl);
-			    printf("function node inclusive time: %d\n", outFuncNodes[i]->timeInc);
+			    //printf("function node exclusive time: %d\n", outFuncNodes[i]->timeExcl);
+			    //printf("function node inclusive time: %d\n", outFuncNodes[i]->timeInc);
 
 			    tabInstFunc[k]->tabTimeExcl[tabInstFunc[k]->nbInsts-1] = outFuncNodes[i]->timeExcl;
 			    tabInstFunc[k]->tabTimeIncl[tabInstFunc[k]->nbInsts-1] = outFuncNodes[i]->timeInc;
@@ -373,17 +373,17 @@ int manageInstances()
 
 	    if (ret == 0)
 		{
-		    printf("\nAdd InstFunc element\n");
+		    //printf("\nAdd InstFunc element\n");
 		    sizeInstFuncs++;
-		    printf("size InstFuncs tab: %d\n", sizeInstFuncs);
+		    //printf("size InstFuncs tab: %d\n", sizeInstFuncs);
 		    tabInstFunc = (InstFunc_t**)realloc(tabInstFunc, sizeInstFuncs*sizeof(InstFunc_t));
 		    tabInstFunc[sizeInstFuncs-1] = (InstFunc_t*)malloc(sizeof(InstFunc_t));
 
 		    strcpy(tabInstFunc[sizeInstFuncs-1]->funcName, outFuncNodes[i]->funcName);
 
-		    printf("Length name outFuncNodes %d: %d\n", i, strlen(outFuncNodes[i]->funcName));
-		    printf("copy name %s\n", outFuncNodes[i]->funcName);
-		    printf("InstFunc %d name: %s\n", i, outFuncNodes[i]->funcName);
+		    //printf("Length name outFuncNodes %d: %d\n", i, strlen(outFuncNodes[i]->funcName));
+		    //printf("copy name %s\n", outFuncNodes[i]->funcName);
+		    //printf("InstFunc %d name: %s\n", i, outFuncNodes[i]->funcName);
 
 		    tabInstFunc[sizeInstFuncs-1]->nbInsts = 1;
 		    int tempNbInsts = tabInstFunc[sizeInstFuncs-1]->nbInsts;
@@ -391,8 +391,8 @@ int manageInstances()
 		    tabInstFunc[sizeInstFuncs-1]->tabTimeExcl = (int*)malloc(tabInstFunc[sizeInstFuncs-1]->nbInsts*sizeof(int));
 		    tabInstFunc[sizeInstFuncs-1]->tabTimeIncl = (int*)malloc(tabInstFunc[sizeInstFuncs-1]->nbInsts*sizeof(int));
 
-		    printf("outFuncNodes %d inclusive time: %d\n", i, outFuncNodes[i]->timeInc);
-		    printf("outFuncNodes %d exclusive time: %d\n", i, outFuncNodes[i]->timeExcl);
+		    //printf("outFuncNodes %d inclusive time: %d\n", i, outFuncNodes[i]->timeInc);
+		    //printf("outFuncNodes %d exclusive time: %d\n", i, outFuncNodes[i]->timeExcl);
 
 		    tabInstFunc[sizeInstFuncs-1]->tabTimeExcl[tempNbInsts-1] = outFuncNodes[i]->timeExcl;
 		    tabInstFunc[sizeInstFuncs-1]->tabTimeIncl[tempNbInsts-1] = outFuncNodes[i]->timeInc;
@@ -404,12 +404,12 @@ int manageInstances()
 
     for (i = 0; i < sizeInstFuncs; i++)
 	{
-	    printf("instFuncs %d function name %s length: %d\n", i, tabInstFunc[i]->funcName, strlen(tabInstFunc[i]->funcName));
-	    printf("instFuncs %d function name %s inclusive time: %d\n", i, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeIncl[0]);
-	    printf("instFuncs %d function name %s exclusive time: %d\n", i, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeExcl[0]);
+	    //printf("instFuncs %d function name %s length: %d\n", i, tabInstFunc[i]->funcName, strlen(tabInstFunc[i]->funcName));
+	    //printf("instFuncs %d function name %s inclusive time: %d\n", i, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeIncl[0]);
+	    //printf("instFuncs %d function name %s exclusive time: %d\n", i, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeExcl[0]);
 	}
 
-    printf("\n***End Instances management***\n");
+    //printf("\n***End Instances management***\n");
 
     return 0;
 }
@@ -419,24 +419,24 @@ int manageInstances()
  */
 int checkInstances()
 {
-    printf("****Begin checkInstances****\n");
+    //printf("****Begin checkInstances****\n");
 
     int i, j;
 
-    printf("Taille InstFuncs: %d\n", sizeInstFuncs);
+    //printf("Taille InstFuncs: %d\n", sizeInstFuncs);
 
     for(i = 0; i < sizeInstFuncs; i++)
 	{
-	    printf("Function names: %s\n", tabInstFunc[i]->funcName);
+	    //printf("Function names: %s\n", tabInstFunc[i]->funcName);
 
 	    for (j = 0; j < tabInstFunc[i]->nbInsts; j++)
 		{
-		    printf("instance %d of function %s 's exclusive time: %d\n", j, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeExcl[j]);
-		    printf("instance %d of function %s 's inclusive time: %d\n", j, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeIncl[j]);
+		    //printf("instance %d of function %s 's exclusive time: %d\n", j, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeExcl[j]);
+		    //printf("instance %d of function %s 's inclusive time: %d\n", j, tabInstFunc[i]->funcName, tabInstFunc[i]->tabTimeIncl[j]);
 		}
 	}
 
-    printf("****End checkInstances****\n");
+    //printf("****End checkInstances****\n");
 
     return 0;
 }
@@ -469,18 +469,18 @@ int addStaticStore(int nbstores)
  */
 int addStaticFuncName(char *funcName)
 {
-    printf("***Begin createStaticFunc()***\n");
+    //printf("***Begin createStaticFunc()***\n");
 
     sizeStaticFunc++;
     tabStaticFunc = (StaticFunc_t**)realloc(tabStaticFunc, sizeStaticFunc*sizeof(StaticFunc_t));
 
     tabStaticFunc[sizeStaticFunc-1] = (StaticFunc_t*)malloc(sizeof(StaticFunc_t));
     strcpy(tabStaticFunc[sizeStaticFunc-1]->funcName, funcName);
-    printf("tab static func name index %d: %s\n",  sizeStaticFunc-1, tabStaticFunc[sizeStaticFunc-1]->funcName);
+    //printf("tab static func name index %d: %s\n",  sizeStaticFunc-1, tabStaticFunc[sizeStaticFunc-1]->funcName);
     tabStaticFunc[sizeStaticFunc-1]->nbloads = 0;
     tabStaticFunc[sizeStaticFunc-1]->nbstores = 0;
 
-    printf("***End createStaticFunc()***\n");
+    //printf("***End createStaticFunc()***\n");
     return 0;
 }
 
@@ -494,24 +494,19 @@ int printInstsFuncs()
 
     for (i = 0; i < sizeInstFuncs; i++)
 	{
-	    printf("tabInstFunc %d\n", i);
-	    fprintf(profInst, " %s", tabInstFunc[i]->funcName);
+	    fprintf(profInst, "%s", tabInstFunc[i]->funcName);
 	    fprintf(profInst, " %d", tabInstFunc[i]->nbloads);
 	    fprintf(profInst, " %d", tabInstFunc[i]->nbstores);
 	    fprintf(profInst, " %d", tabInstFunc[i]->nbInsts);
 
 	    for (j = 0; j < tabInstFunc[i]->nbInsts; j++)
 		{
-		    printf("Instance %d\n", j);
+		    fprintf(profInst, " %d", tabInstFunc[i]->tabTimeIncl[j]);
+		    fprintf(profInst, " %d", tabInstFunc[i]->tabTimeExcl[j]);
 		}
 
-	    fprintf(profInst, " %d", tabInstFunc[i]->tabTimeIncl[j]);
-	    fprintf(profInst, " %d", tabInstFunc[i]->tabTimeExcl[j]);
 	    fprintf(profInst, "\n");
 	}
-
-    fprintf(profInst, "average time of load: %f\n", averageTimeLoad);
-    fprintf(profInst, "average time of store: %f\n", averageTimeStore);
 
     return 0;
 }
@@ -521,12 +516,12 @@ int printInstsFuncs()
  */
 int initStaticFunc()
 {
-    printf("***Begin initStaticFunc()***\n");
+    //printf("***Begin initStaticFunc()***\n");
 
     sizeStaticFunc = 0;
     tabStaticFunc = (StaticFunc_t**)malloc(sizeStaticFunc*sizeof(StaticFunc_t));
 
-    printf("***End initStaticFunc()***\n");
+    //printf("***End initStaticFunc()***\n");
 
     return 0;
 }
@@ -536,18 +531,18 @@ int initStaticFunc()
  */
 int checkStaticFunc()
 {
-    printf("***Begin checkStaticFunc()***\n");
+    //printf("***Begin checkStaticFunc()***\n");
     int i;
 
     for (i = 0; i < sizeStaticFunc; i++)
 	{
-	    printf("StaticFunc %d funcName: %s\n", i, tabStaticFunc[i]->funcName);
-	    printf("StaticFunc %d funcName length: %d\n", i, strlen(tabStaticFunc[i]->funcName));
-	    printf("StaticFunc %d nbre loads: %d\n", i, tabStaticFunc[i]->nbloads);
-	    printf("StaticFunc %d nbre stores: %d\n", i, tabStaticFunc[i]->nbstores);
+	    //printf("StaticFunc %d funcName: %s\n", i, tabStaticFunc[i]->funcName);
+	    //printf("StaticFunc %d funcName length: %d\n", i, strlen(tabStaticFunc[i]->funcName));
+	    //printf("StaticFunc %d nbre loads: %d\n", i, tabStaticFunc[i]->nbloads);
+	    //printf("StaticFunc %d nbre stores: %d\n", i, tabStaticFunc[i]->nbstores);
 	}
 
-    printf("***End checkStaticFunc()***\n");
+    //printf("***End checkStaticFunc()***\n");
 
     return 0;
 }
@@ -557,40 +552,40 @@ int checkStaticFunc()
  */
 int correlateDynStatic()
 {
-    printf("***Begin correlateDynStatic()***\n");
+    //printf("***Begin correlateDynStatic()***\n");
     int i, j;
 
-    printf("sizeInstFuncs: %d\n", sizeInstFuncs);
-    printf("sizeStaticFunc: %d\n", sizeStaticFunc);
+    //printf("sizeInstFuncs: %d\n", sizeInstFuncs);
+    //printf("sizeStaticFunc: %d\n", sizeStaticFunc);
 
     for (i = 0; i < sizeInstFuncs; i++)
 	{
-	    printf("before correlation..\n");
-	    printf("number of loads: %d\n", tabInstFunc[i]->nbloads);
-	    printf("number of stores: %d\n", tabInstFunc[i]->nbstores);
+	    //printf("before correlation..\n");
+	    //printf("number of loads: %d\n", tabInstFunc[i]->nbloads);
+	    //printf("number of stores: %d\n", tabInstFunc[i]->nbstores);
 	}
 
     for (i = 0; i < sizeInstFuncs; i++)
 	{
-	    printf("tabInstFunc index %d name: %s\n",i, tabInstFunc[i]->funcName);
+	    //printf("tabInstFunc index %d name: %s\n",i, tabInstFunc[i]->funcName);
 
 	    for (j = 0; j < sizeStaticFunc; j++)
 		{
-		    printf("tabStaticFunc index %d name: %s\n",j, tabStaticFunc[j]->funcName);
+		    //printf("tabStaticFunc index %d name: %s\n",j, tabStaticFunc[j]->funcName);
 
 		    if (strncmp(tabStaticFunc[j]->funcName, tabInstFunc[i]->funcName, 6) == 0)
 			{
-			    printf("Match between dynamic and static trace of function %s in rank %d\n", tabInstFunc[i]->funcName, i);
+			    //printf("Match between dynamic and static trace of function %s in rank %d\n", tabInstFunc[i]->funcName, i);
 			    tabInstFunc[i]->nbloads = tabStaticFunc[j]->nbloads;
 			    tabInstFunc[i]->nbstores = tabStaticFunc[j]->nbstores;
 
-			    printf("number of loads: %d\n", tabInstFunc[i]->nbloads);
-			    printf("number of stores: %d\n", tabInstFunc[i]->nbstores);
+			    //printf("number of loads: %d\n", tabInstFunc[i]->nbloads);
+			    //printf("number of stores: %d\n", tabInstFunc[i]->nbstores);
 			}
 		}
 	}
 
-    printf("***End correlateDynStatic()***\n");
+    //printf("***End correlateDynStatic()***\n");
 
     return 0;
 }
@@ -600,7 +595,7 @@ int correlateDynStatic()
  */
 int printFuncStats()
 {
-    printf("***Begin printFuncStats()***\n");
+    //printf("***Begin printFuncStats()***\n");
 
     int i;
     FILE *profStats = fopen(PATHSTATS, "w");
@@ -615,7 +610,7 @@ int printFuncStats()
 	    fprintf(profStats, "\n");
 	}
 
-    printf("***End printFuncStats()***\n");
+    //printf("***End printFuncStats()***\n");
 
     return 0;
 }
@@ -625,7 +620,7 @@ int printFuncStats()
  */
 int printCG(funcNode_t *node)
 {
-    printf("***Begin printCG()***\n");
+    //printf("***Begin printCG()***\n");
 
     strcat(bufferPrint, "digraph { ");
 
@@ -633,14 +628,14 @@ int printCG(funcNode_t *node)
 
     strcat(bufferPrint, "}");
 
-    printf("bufferPrint: %s\n", bufferPrint);
+    //printf("bufferPrint: %s\n", bufferPrint);
 
     FILE *profCG = fopen(PATHCG, "w");
 
     fprintf(profCG, "%s\n", bufferPrint);
     fclose(profCG);
 
-    printf("***End printCG()***\n");
+    //printf("***End printCG()***\n");
 
     return 0;
 }
@@ -652,7 +647,7 @@ int printCG(funcNode_t *node)
  */
 int computeLoadStore()
 {
-    printf("***Begin computeLoadStore()***\n");
+    //printf("***Begin computeLoadStore()***\n");
     float *tabValueLoad, *tabValueStore;
     int i;
 
@@ -664,7 +659,7 @@ int computeLoadStore()
 
     for (i = 1; i < sizeInstFuncs; i++)
 	{
-	    printf("Iterate tabInstFunc %d\n", i);
+	    //printf("Iterate tabInstFunc %d\n", i);
 	    int loads1 = tabInstFunc[0]->nbloads;
 	    int stores1 =tabInstFunc[0]->nbstores;
 	    int loads2 = tabInstFunc[i]->nbloads;
@@ -672,11 +667,11 @@ int computeLoadStore()
 	    int time1 = tabInstFunc[i]->tabTimeExcl[0];
 	    int time2 = tabInstFunc[i]->tabTimeExcl[0];
 
-	    printf("Calculate load and store time at %d\n", i);
+	    //printf("Calculate load and store time at %d\n", i);
 
 	    float diviseur = loads1*stores2-stores1*loads2;
 
-	    printf("diviseur: %f\n", diviseur);
+	    //printf("diviseur: %f\n", diviseur);
 
 	    // Résolution du système
 	    if (diviseur != 0.0)
@@ -690,8 +685,8 @@ int computeLoadStore()
 		    tabValueStore[i] = 0.0;
 		}
 
-	    printf("load at %d rank executed in %f cycles\n", i, tabValueLoad[i]);
-	    printf("store at %d rank executed in %f cycles\n", i, tabValueStore[i]);
+	    //printf("load at %d rank executed in %f cycles\n", i, tabValueLoad[i]);
+	    //printf("store at %d rank executed in %f cycles\n", i, tabValueStore[i]);
 
 	    averageTimeLoad += tabValueLoad[i];
 	    averageTimeStore += tabValueStore[i];
@@ -701,10 +696,10 @@ int computeLoadStore()
     averageTimeLoad /= sizeInstFuncs-1;
     averageTimeStore /= sizeInstFuncs-1;
 
-    printf("averageTimeLoad: %f cycles\n", averageTimeLoad);
-    printf("averageTimeStore: %f cycles\n", averageTimeStore);
+    //printf("averageTimeLoad: %f cycles\n", averageTimeLoad);
+    //printf("averageTimeStore: %f cycles\n", averageTimeStore);
 
-    printf("***End computeLoadStore()***\n");
+    //printf("***End computeLoadStore()***\n");
 
     return 0;
 }
