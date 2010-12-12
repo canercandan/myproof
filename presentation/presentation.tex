@@ -1,0 +1,57 @@
+\documentclass{beamer}
+\usepackage[french]{my_package}
+
+\title[Outil de profiling \emph{myproof}]{Présentation de \emph{myproof}}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Introduction}
+  \begin{itemize}
+  \item Logiciel de profiling
+  \item Interface Modulable
+  \item Gestion des pragmas
+  \item Instrumentation statique
+  \item Instrumentation dynamique
+  \item Analyse et visualisation des résultats
+  \item Et le multithreading ?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Instrumentation statique}
+  \begin{itemize}
+  \item Instrumentation ``statique'' $\rightarrow$ Compilation
+  \item Inspection des accès mémoire (load/store)
+  \item 2 passes concernées: ``pass\_loop'' et ``pass\_bb''
+  \item Parcours des blocs de base
+  \item Représentation GIMPLE
+  \item Affectation (GIMPLE\_ASSIGN) ?
+  \item Analyse des opérandes
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Analyse des instrumentations}
+  \begin{itemize}
+  \item Parsing des fichiers de sortie (LEX et YACC)
+  \item Profilage inclusif $\rightarrow$ profilage exclusif ? Arbre n-aire
+  \item Détection des imbrications entre fonctions
+  \item Gestion des instances $\rightarrow$ comparaison des temps d'exécution
+  \item Corrélation entre instrumentations statique et dynamique
+  \item Calcul des latences de load et store ? Non
+  \item Graphe d'appel des fonctions
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Et le multithreading ?}
+  \begin{itemize}
+  \item Exécution multithreadée $\rightarrow$ écriture concurrente sur les prises de mesure
+  \item Utilisation des mutex accès exclusif aux données
+  \item Sémaphores POSIX $\rightarrow$ synchronisation des actions entre processus
+  \item Mot clé ``\_thread''
+  \end{itemize}
+\end{frame}
+
+\end{document}
