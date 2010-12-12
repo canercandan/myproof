@@ -29,6 +29,16 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Directives pragma}
+ \begin{itemize}
+  \item Souci de modularité
+  \item 2 styles de déclarations 
+  \item $\rightarrow$ pragma instrumente foo
+  \item $\rightarrow$ pragma instrumente (fct1, fct2)
+  \item Gestion d'erreur
+  \end{itemize}
+ \end{frame}
+
 \begin{frame}{Instrumentation statique}
   \begin{itemize}
   \item Instrumentation ``statique'' $\rightarrow$ Compilation
@@ -38,8 +48,19 @@
   \item Représentation GIMPLE
   \item Affectation (GIMPLE\_ASSIGN) ?
   \item Analyse des opérandes
+  \item Permet de générer un graphe CFG
   \end{itemize}
 \end{frame}
+
+\begin{frame}{Instrumentation dynamique}
+  \begin{itemize}
+  \item Le pragma permet d'enregistrer les fonctions à instrumenter
+  \item Parcours des blocs de base d'entrée et de sortie des fonctions à l'aide d'une passe d'instrumentation
+  \item On utilise une librairie ``measure'' contenant ``myproof\_measure\_start(fname)'' et ``myproof\_measure\_stop''
+  \item Mesure avec l'instruction assembleur RDTSC
+  \end{itemize}
+ \end{frame}
+  
 
 \begin{frame}{Analyse des instrumentations}
   \begin{itemize}
