@@ -45,11 +45,13 @@
   \begin{itemize}
   \item Instrumentation ``statique'' $\rightarrow$ Compilation
   \item Inspection des accès mémoire (load/store)
+  \item On cherche à détecter les blocs de base ainsi que les boucles
   \item 2 passes concernées: ``pass\_loop'' et ``pass\_bb''
   \item Parcours des blocs de base
   \item Représentation GIMPLE
   \item Affectation (GIMPLE\_ASSIGN) ?
   \item Analyse des opérandes
+  \item Utilisation de la passe de référence "parloops" ainsi que des options d'optimisation "-O1" ou "-O2"
   \item Permet de générer un graphe CFG
   \end{itemize}
 \end{frame}
