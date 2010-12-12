@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define PATHCG "MyProfCallGrap.dot"
-#define PATHINST "profInstsOut.txt"
-#define PATHSTATS "profStats.txt"
+#define PATHCG		"profiler_callgraph.txt"
+#define PATHINST	"profiler_instances.txt"
+#define PATHSTATS	"profiler_stats.txt"
+#define PATHOUTPUT	"profiler_output.txt"
 
 /*
  * Structure permettant de stocker

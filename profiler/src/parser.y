@@ -62,6 +62,7 @@ exp: FUNCTION NAME RETLINE
 {
     //printf("\n$3: %s \n", $3);
     char * tempStr = strtok($3, " ");
+    (void)tempStr;
     //printf("tempStr: %s\n", tempStr);
     char * nameFunc = strtok($3, " ");
     strcat(nameFunc, "\0");
@@ -121,6 +122,7 @@ NBSTORES: NUMERIC STORE
 
 int yyerror(const char *str)
 {
+    (void)str;
     //printf("error detected: ");
     //printf("%s\n", str);
     return 1;

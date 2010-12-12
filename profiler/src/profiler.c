@@ -194,7 +194,7 @@ int initListNodes()
 {
 
     //Initialize output stream
-    pFile = fopen("output.txt","w");
+    pFile = fopen(PATHOUTPUT, "w");
 
     sizeListNodes = 1;
     rankList=0;
