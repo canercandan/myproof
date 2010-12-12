@@ -1,0 +1,7 @@
+digraph G {
+  node [shape=ellipse, width=0.9, fixedsize=true, style=filled, color=mediumseagreen, fontcolor=white];
+  "myproof" -> {"gcc plugin" "profiler" "report"};
+  "gcc plugin" -> {"init" "passes" "pragmas" "summary" "error" "end" "measure" "params"};
+  "myproof" [width=1.2, style=filled, color=orangered1];
+  "gcc plugin" [width=1.2, style=filled, color=orange];
+}
