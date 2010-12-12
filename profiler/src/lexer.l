@@ -11,9 +11,9 @@
 [0-9]+			{yylval.value = atoi(yytext); return NUMERIC;}
 " entree cycle "	{return ENTERCYCLE;}
 " sortie cycle "	{return EXITCYCLE;}
-"load"			{return LOAD;}
-"store"			{return STORE;}
-"*"			{return MUL;}
+" load"			{return LOAD;}
+" store"			{return STORE;}
+" * "			{return MUL;}
 %%
 
 int yywrap(void) { return 1; }
