@@ -1,0 +1,21 @@
+fonction 'toto'
+3 load
+2 * 10 load
+1 * 10 store
+2 load
+3 * 10 load
+3 * 10 store
+fonction 'titi'
+8 load
+2 * 10 load
+1 * 10 store
+2 load
+3 * 10 load
+8 * 10 store
+fonction 'tata'
+3 load
+9 * 10 load
+1 * 10 store
+2 load
+3 * 10 load
+3 * 10 store
