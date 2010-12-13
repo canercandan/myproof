@@ -19,7 +19,8 @@ extern "C"
 
 #define MYPROOF_MEASURE_NAME_SIZE 128
 #define MYPROOF_MEASURE_OUTPUT "myproof.out"
-#define MYPROOF_MEASURE_FORMAT "Appel %u à la fonction %s entrée cycle %lu sortie cycle %lu\n"
+    //#define MYPROOF_MEASURE_FORMAT "Appel %u à la fonction %s entrée cycle %lu sortie cycle %lu\n"
+#define MYPROOF_MEASURE_FORMAT "appel à la fonction %s entrée cycle %lu sortie cycle %lu\n"
 #define MYPROOF_MEASURE_FORMAT_EXTENDED "Appel %u à la fonction %s entrée cycle %lu sortie cycle %lu coût %lu\n"
 
     /*
