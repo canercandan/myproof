@@ -18,6 +18,7 @@ SET(SOURCES
   t-pragma-error
   t-pragma-funcs
   t-partie1
+  t-timer1
   )
 
 FOREACH(current ${SOURCES})

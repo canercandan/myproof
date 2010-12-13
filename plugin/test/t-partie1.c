@@ -1,5 +1,7 @@
 #include <stdlib.h>
 
+#pragma myproof instrumente (toto, main)
+
 #define N 100000
 #define M N
 

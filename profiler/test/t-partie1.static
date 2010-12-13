@@ -1,0 +1,9 @@
+fonction 'toto'
+3 load
+2 * 100000 load
+1 * 100000 store
+2 load
+3 * 100000 load
+3 * 100000 store
+fonction 'main'
+1 load

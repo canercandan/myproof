@@ -66,7 +66,7 @@ static t_mylist_res print_part1_functions( void *data, void *user_data )
 {
     t_myproof_function *function = data;
     FILE *output = user_data;
-    fprintf(output, "fonction %s\n", function->name);
+    fprintf(output, "fonction '%s'\n", function->name);
     mylist_all_data( function->basicblocks, print_part1_basicblocks, (void*)output);
     return MYLIST_R_CONTINUE;
 }

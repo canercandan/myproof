@@ -1,5 +1,7 @@
 #include <math.h>
 
+#pragma myproof instrumente (syracuse,main)
+
 unsigned int
 syracuse ( int N )
 {
