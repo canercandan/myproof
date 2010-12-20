@@ -5,7 +5,7 @@ PROJECT(report)
 SET(LATEX_COMPILER_FLAGS "-interaction=nonstopmode --enable-write18" CACHE STRING "Flags passed to latex.")
 INCLUDE(UseLATEX.cmake)
 
-SET(INPUTS
+SET(SOURCE_INPUTS
   schema.tex
   introduction.tex
   pragma.tex
@@ -16,4 +16,4 @@ SET(INPUTS
   critique.tex
   )
 
-ADD_LATEX_DOCUMENT(${PROJECT_NAME}.tex INPUTS ${INPUTS} IMAGE_DIRS images DEFAULT_PDF)
+ADD_LATEX_DOCUMENT(${PROJECT_NAME}.tex INPUTS ${SOURCE_INPUTS} IMAGE_DIRS images DEFAULT_PDF)
